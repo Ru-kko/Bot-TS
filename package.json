@@ -1,0 +1,27 @@
+{
+  "name": "bot-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -w",
+    "start": "node build/index.js",
+    "crud": "node build/Test/crud.test.js",
+    "bot": "node build/Test/bot.test.js",
+    "test": "node build/Test/spesific.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.3.0",
+    "node-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
+}
