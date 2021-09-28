@@ -10,32 +10,36 @@ interface textBoxOptions{
 }
 
 export default (ctx:context, text: string, options:textBoxOptions) =>{
+    ctx.beginPath();
     var words = text.split(' ');
-    let split:Array<string> = [];
-    var lastSplit = words.length;
     var size = options.textSize || 18;
 
     ctx.fillStyle = options.color || '#FFFFFF';
     ctx.font = `${size}px MPLUS`
 
-    const div =  (txt:string) =>{
-        var textSplit = txt.split(' ');
-        var lenght = textSplit.length;
+    let split:string[]= [];
 
-        while (ctx.measureText(textSplit.join(' ')).width > options.width){
-            lenght -= 1;
-            textSplit.slice(0, lenght);
+
+    const div = (_:string[]):number => {
+        var txt = _.slice();
+
+        while(ctx.measureText(txt.join(' ')).width > options.width){
+            txt.pop();
         };
-        lastSplit = textSplit.length;
-        split.push(textSplit.join(' '));
-    };
-    for(var i = 0; i< options.rows; i++){
-        words.slice(words.length - length, words.length);
-        div(words.join(' '));
-    };
-    for(var i = 0; i < split.length; i++){
-        ctx.fillText(split[i], options.x, ((size * i ) + options.y ) + size)
+        split.push(txt.join(' '));
+        return txt.length;
     }
+    for(var i = 0; i< options.rows; i++){
+        var txt = words.slice();
+
+        while(ctx.measureText(txt.join(' ')).width > options.width){
+            txt.pop();
+        };
+        ctx.fillText(txt.join(' '), options.x, options.y, options.width);
+
+        txt = words.splice(0, txt.length);
+    };
+    ctx.closePath();
 };
 //function textbox(ctx, texto, x, y, width, color, nReenglones, size) {
 
