@@ -8,7 +8,8 @@
     "start": "node build/index.js",
     "crud": "node build/Test/crud.test.js",
     "bot": "node build/Test/bot.test.js",
-    "test": "node build/Test/spesific.test.js"
+    "resizer": "node build/Test/textResizer.test.js",
+    "animeFind": "node build/Test/animeFetch.test.js"
   },
   "keywords": [],
   "author": "",

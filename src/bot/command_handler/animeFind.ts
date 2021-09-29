@@ -1,37 +1,41 @@
 import Canvas from 'canvas';
+import fetch from 'node-fetch';
 
-// /*           Text Box         */
-// function textbox(ctx, texto, x, y, width, color, nReenglones, size) {
+import Resizer from './methods/textResizer';
 
-//     ctx.fillStyle = color
-//     ctx.font = `${size}px MPLUS`
-//     let diviciones = []
-  
-  
-//     function dividir(txt) {
-//       var reenglon = txt
-//       var largo = txt.length
-//       while (ctx.measureText(reenglon).width > width) {
-//         reenglon = txt.slice(0, largo - 1)
-//         largo = largo - 1
-//       }
-//       diviciones.push(reenglon)
-//     }
-  
-//     for (var i = 0; i < nReenglones; i++) {
-//       if (i === 0) {
-//         dividir(texto)
-//       }
-//       else {
-//         //console.log(texto.slice(diviciones[i-1].length , texto.length))
-//         dividir(texto.slice(diviciones.join("").length, texto.length))
-//       }
-//     }
-//     for (var i = 0; i < diviciones.length; i++) {
-//       ctx.fillText(diviciones[i], x, ((size * i) + y) + size)
-//     }
+import { Message } from 'discord.js';
+
+
+export default async (testTXT:string , message:Message | undefined) =>{
+    const text:string[] = testTXT.split(' ');
+
+    var searchUrl = 'https://api.jikan.moe/v3/search/';
+    var nombreAnime = text.splice(2, text.length).join(" ");
+
+    
+
+    const response = await fetch(searchUrl + 'anime?q' + nombreAnime).then(res => res.json())
+    console.log(response);
+}
+
+//   if (comando === "anime" ) {
+//     var urlBusqueda = "https://api.jikan.moe/v3/search/"
+//     var nombreAnime = texto.splice(2, texto.length).join(" ")
+//     Fetch(urlBusqueda + "anime?q=" + nombreAnime)
+//       .then(res => res.json())
+//       .then(inf => {
+//         var resultado = inf.results[0]
+//         datosAnime(mensaje,
+//           resultado.synopsis,
+//           resultado.image_url,
+//           resultado.type,
+//           resultado.title,
+//           resultado.episodes,
+//           resultado.end_date,
+//           resultado.start_date)
+//     })
 //   }
-  
+
 //   /*            Anime           */
 //   async function datosAnime(mensaje, sinop, imagen, tipo, titulo, episodios, fin, inicio) {
 //     const embed = new Disc.MessageEmbed()
@@ -144,21 +148,4 @@ import Canvas from 'canvas';
 //     embed.setImage('attachment://Anime.jpg')
 //     embed.setColor(color.color)
 //     mensaje.channel.send(embed)
-//   }
-//   if (comando === "anime" ) {
-//     var urlBusqueda = "https://api.jikan.moe/v3/search/"
-//     var nombreAnime = texto.splice(2, texto.length).join(" ")
-//     Fetch(urlBusqueda + "anime?q=" + nombreAnime)
-//       .then(res => res.json())
-//       .then(inf => {
-//         var resultado = inf.results[0]
-//         datosAnime(mensaje,
-//           resultado.synopsis,
-//           resultado.image_url,
-//           resultado.type,
-//           resultado.title,
-//           resultado.episodes,
-//           resultado.end_date,
-//           resultado.start_date)
-//     })
 //   }
