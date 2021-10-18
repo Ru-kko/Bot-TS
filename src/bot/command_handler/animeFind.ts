@@ -2,20 +2,9 @@ import Canvas from 'canvas';
 
 import Resizer from './methods/textResizer';
 
-import { Message } from 'discord.js';
+import { Message, MessageEmbed, MessageAttachment, ColorResolvable, HexColorString } from 'discord.js';
 import axios from 'axios';
 
-export default async (testTXT: string, message: Message | undefined) => {
-    const text: string[] = testTXT.split(' ');
-
-    var searchUrl = 'https://api.jikan.moe/v3/search/anime?q=';
-    var nombreAnime = text.splice(2, text.length).join(" ");
-
-    const res = await axios({ method: 'GET', url: searchUrl + nombreAnime }).then(res => { return (<queryResponse>res.data).results[0]});
-
-    console.log(res);
-
-}
 interface queryResponse {
     results: animeInf[]
 }
@@ -26,142 +15,110 @@ interface animeInf {
     title: string;
     airing: boolean;
     synopsis: string;
-    type: 'TV' | 'OVA' | 'MOVIE' | 'SPECIAL' | 'ONA' | 'MUSIC';
+    type: 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music';
     episodes: number;
     score: number;
-    start_date: string;
-    end_date: string;
+    start_date: string | null;
+    end_date: string | null;
     members: number;
     rated: string;
 }
-//   if (comando === "anime" ) {
-//     var urlBusqueda = "https://api.jikan.moe/v3/search/"
-//     var nombreAnime = texto.splice(2, texto.length).join(" ")
-//     Fetch(urlBusqueda + "anime?q=" + nombreAnime)
-//       .then(res => res.json())
-//       .then(inf => {
-//         var resultado = inf.results[0]
-//         datosAnime(mensaje,
-//           resultado.synopsis,
-//           resultado.image_url,
-//           resultado.type,
-//           resultado.title,
-//           resultado.episodes,
-//           resultado.end_date,
-//           resultado.start_date)
-//     })
-//   }
+interface StatusColor {
+    color: string & ColorResolvable;
+    text: string;
+}
+var colors: Map<String, StatusColor> = new Map();
 
-//   /*            Anime           */
-//   async function datosAnime(mensaje, sinop, imagen, tipo, titulo, episodios, fin, inicio) {
-//     const embed = new Disc.MessageEmbed()
-//     const canvas = Canvas.createCanvas(400, 600)
-//     const ctx = canvas.getContext('2d');
-
-//     /*         Fondo            */
-
-//     const fondo = await Canvas.loadImage('./public/FondoAnime.jpg');
-//     ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
-
-//     /*       Emitiendo?         */
-
-//     var fechaFin = fin ? fin.slice(0, 10).split('-') : undefined
-//     var fechaIni = inicio ? inicio.slice(0, 10).split('-') : undefined
-
-//     let hoy = new Date()
-//     let ultimaEmision = fin ? new Date(fin) : "SinFin"
-//     let primeraEmision = inicio ? new Date(inicio) : "Proximamente"
-
-//     ctx.beginPath()
-
-//     ctx.font = '15px MPLUS'
+colors.set('TV', { color: '#33FF36', text: "ANIME"});
+colors.set('Special', { color: '#FCBF00', text: "SPECIAL"});
+colors.set('OVA', { color: '#FCBF00', text: "OVA"});
+colors.set('Movie', { color: '#FC0000', text: "MOVIE"});
+colors.set('ONA', { color: '#FC00E9', text: "ONA"});
+colors.set('Music', { color: '#2E86C1', text: "MUSIC"});
 
 
-//     if (primeraEmision >= hoy || !inicio) {
-//       ctx.fillStyle = "#33FF36"
-//       ctx.fillText("Proximamente", 210, 180)
-//     }
-//     else if (!fin || ultimaEmision > hoy) {
-//       ctx.fillStyle = "#FCBF00"
-//       ctx.fillText("No Ha Finalizado", 210, 180)
-//     }
-//     else if (ultimaEmision < hoy) {
-//       ctx.fillStyle = "#FC0000"
-//       ctx.fillText("Finalizado", 210, 180)
-//     }
-//     ctx.closePath()
 
-//     /*          Datos           */
+export default async (message: Message) => {
+    const text = message.content.split(' ');
 
-//     ctx.beginPath()
+    var searchUrl = 'https://api.jikan.moe/v3/search/anime?q=';
+    var nombreAnime = text.splice(2, text.length).join(" ");
 
-//     ctx.font = '15px MPLUS'
-//     ctx.fillStyle = '#FFFFFF'
+    const res = await axios({ method: 'GET', url: searchUrl + nombreAnime }).then(res => { return (<queryResponse>res.data).results[0] });
 
-//     if (fechaIni) {
-//       ctx.fillText(`Inicio: ${fechaIni.join('/')}`, 210, 200)
-//     }
-//     if (fechaFin) {
-//       ctx.fillText(`Termina: ${fechaFin.join('/')}`, 210, 220)
-//     }
-//     ctx.closePath()
-//     /*        Episodeos         */
-//     ctx.beginPath()
-//     ctx.font = '15px MPLUS'
-//     ctx.fillStyle = '#FFFFFF'
-//     if (episodios === 0) {
-//       ctx.fillText(`Episodios: Indefinidos`, 210, 240)
-//     } else {
-//       ctx.fillText(`Episodios: ${episodios}`, 210, 240)
-//     }
+    const image = async () => {
+        const embed = new MessageEmbed();
+        const canvas = Canvas.createCanvas(400, 800);
+        const ctx = canvas.getContext('2d');
 
-//     ctx.closePath()
-//     /*         imagen           */
+        /*         Background            */
+        ctx.beginPath();
+        const fondo = await Canvas.loadImage('./public/images/FondoAnime.jpg');
+        ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+        ctx.closePath();
+        /*            Status             */
+        ctx.beginPath();
+        if (res.airing) {
+            ctx.fillStyle = "#FCBF00";
+            ctx.fillText("Airling", 210, 180)
+        } else {
+            const today = new Date();
+            if (!res.start_date || (new Date(res.start_date) > today)) {
+                ctx.fillStyle = "#33FF36";
+                ctx.fillText("Coming soon", 210, 180)
+            } else {
+                ctx.fillStyle = "#FC0000";
+                ctx.fillText("Finished", 210, 180)
+            }
+        }
+        ctx.closePath();
+        /*             Info              */
+        ctx.beginPath();
+        ctx.font = '15px MPLUS'
+        ctx.fillStyle = '#FFFFFF'
 
-//     const portada = await Canvas.loadImage(imagen);
-//     ctx.drawImage(portada, 15, 115, 185, 310);
+        if (res.start_date) ctx.fillText(`Start: ${res.start_date.slice(0, 10)}`, 210, 200);
+        if (res.end_date) ctx.fillText(`Termina: ${res.end_date.slice(0, 10)}`, 210, 220);
+        ctx.closePath();
+        /*            Episodes            */
+        ctx.beginPath();
+        ctx.font = '15px MPLUS';
+        ctx.fillStyle = '#FFFFFF';
+        if (res.episodes === 0) {
+            ctx.fillText(`Episodios: Not yet`, 210, 240)
+        } else {
+            ctx.fillText(`Episodios: ${res.episodes}`, 210, 240)
+        }
+        ctx.closePath();
+        /*              Image             */
+        const img = await Canvas.loadImage(res.image_url);
+        ctx.drawImage(img, 15, 115, 185, 310);
+        /*            Synopsis             */
+        Resizer(ctx, res.synopsis, { x: 15, y: 440, width: 370, rows: 5 });
+        /*              Name               */
+        Resizer(ctx, res.title, { x: 210, y: 115, width: 175, rows: 3, textSize: 15 });
+        /*              Color              */
+        ctx.beginPath();
+        ctx.fillStyle = colors.get(res.type)?.color || '#FFFFFF';
+        ctx.fillRect(0, 90, 400, 10);
 
-//     /*         Synopsis         */
+        ctx.font = '20px MPLUS';
+        ctx.fillText(colors.get(res.type)?.text || 'TV', 20, 70);
+        ctx.closePath();
+        /*             Author              */
+        ctx.beginPath();
+        ctx.arc(200, 60, 50, 0, 2 * Math.PI, false);
+        ctx.clip();
+        let profile = await Canvas.loadImage(message.author.displayAvatarURL({ format: "jpg", dynamic: true, size: 1024 }))
+        ctx.drawImage(profile, 150, 10, 100, 100);
+        ctx.closePath();
 
-//     textbox(ctx, sinop, 15, 440, 370, '#FFFFFF', 6, 18)
+        /*               Send               */
+        const attachment = new MessageAttachment(canvas.toBuffer(), 'Anime.jpg');
+        embed.setImage(attachment.url);
+        embed.setColor(colors.get(res.type)?.color || <ColorResolvable>'GREEN');
 
-//     /*         Nomber           */
-
-//     textbox(ctx, titulo, 210, 115, 175, '#FFFFFF', 3, 15)
-
-//     /*         Color            */
-//     var coloresP = [
-//       { tipo: 'TV', color: "#33FF36", tp: "ANIME" },
-//       { tipo: 'Special', color: "#FCBF00", tp: "OVA" },
-//       { tipo: 'OVA', color: "#FCBF00", tp: "OVA" },
-//       { tipo: 'Movie', color: "#FC0000", tp: "PELICULA" },
-//       { tipo: 'ONA', color: "#FC00E9", tp: "ONA" }
-//     ]
-
-//     const color = coloresP.find(cl => cl.tipo === tipo)
-//     ctx.beginPath()
-//     ctx.fillStyle = color.color
-//     ctx.fillRect(0, 90, 400, 10)
-
-//     ctx.font = '20px MPLUS'
-//     ctx.fillText(color.tp, 20, 70)
-//     ctx.closePath()
-
-
-//     /*         Autor            */
-
-//     ctx.beginPath()
-//     ctx.arc(200, 60, 50, 0, 2 * Math.PI, false);
-//     ctx.clip();
-//     ctx.closePath();
-//     let perfil_img = await Canvas.loadImage(mensaje.author.displayAvatarURL({ format: "jpg", dynamic: true, size: 1024 }))
-//     ctx.drawImage(perfil_img, 150, 10, 100, 100);
-
-//     /*         Enviar           */
-
-//     const attachment = new Disc.MessageAttachment(canvas.toBuffer(), 'Anime.jpg');
-//     embed.attachFiles(attachment)
-//     embed.setImage('attachment://Anime.jpg')
-//     embed.setColor(color.color)
-//     mensaje.channel.send(embed)
-//   }
+        return embed;
+    } 
+    message.channel.send({embeds: [await image()]});
+}
