@@ -95,9 +95,9 @@ export default async (message: Message) => {
         const img = await Canvas.loadImage(res.image_url);
         ctx.drawImage(img, 15, 115, 185, 310);
         /*            Synopsis             */
-        Resizer(ctx, res.synopsis, { x: 15, y: 440, width: 370, rows: 5 });
+        Resizer(ctx, res.synopsis, { x: 15, y: 440, width: 370, rows: 6, textSize: 16 });
         /*              Name               */
-        Resizer(ctx, res.title, { x: 210, y: 115, width: 175, rows: 3, textSize: 15 });
+        Resizer(ctx, res.title, { x: 210, y: 115, width: 175, rows: 3 });
         /*              Color              */
         ctx.beginPath();
         ctx.fillStyle = colors.get(res.type)?.color || '#FFFFFF';

@@ -24,7 +24,7 @@ export default (ctx:context, text: string, options:textBoxOptions) =>{
             txt.pop();
         };
         ctx.fillText(txt.join(' '), options.x,
-            ((size * i) + options.y) + size  
+            ((size * i) + options.y) + (2 * size)  
         );
 
         txt = words.splice(0, txt.length);
