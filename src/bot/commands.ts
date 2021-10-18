@@ -1,9 +1,12 @@
 import { registerFont } from "canvas";
-registerFont('../../../public/MPLUS1p-Black.ttf', { family: 'MPLUS' });
+import { Message } from "discord.js";
+import animeFind from './command_handler/animeFind';
+registerFont('./public/MPLUS.ttf', { family: 'MPLUS' });
 
 
-const commandMap = new Map();
+const commandMap: Map<string, (msg: Message) => Promise<void>> = new Map();
 
+commandMap.set("anime", animeFind);
 
 
 export default commandMap;

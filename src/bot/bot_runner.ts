@@ -39,18 +39,15 @@ export default () => {
         if(message.author.bot) return;
 
 
-        var prefix:String = "waifu";
+        var prefix:String = await crud.getServerPrefix(message.guild!.id) || "waifu";
         const content = message.content.split(" ");
 
         if(message.guild){
-            const find = await crud.getServerPrefix(message.guild.id)
-            prefix = find;
             crud.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5)
         }
         if(content[0] == prefix){
-            /*if(cmd.has(content[1])){
-                cmd.get(content[1])(message);
-            }*/
+            const func = cmd.get(content[1]);
+            if (func) func(message);
         };
     });
     client.login(process.env.discord_token);

@@ -2,7 +2,7 @@ import Canvas from 'canvas';
 
 import Resizer from './methods/textResizer';
 
-import { Message, MessageEmbed, MessageAttachment, ColorResolvable, HexColorString } from 'discord.js';
+import { Message, MessageEmbed, MessageAttachment, ColorResolvable, BufferResolvable } from 'discord.js';
 import axios from 'axios';
 
 interface queryResponse {
@@ -42,22 +42,23 @@ export default async (message: Message) => {
     const text = message.content.split(' ');
 
     var searchUrl = 'https://api.jikan.moe/v3/search/anime?q=';
-    var nombreAnime = text.splice(2, text.length).join(" ");
+    var animeName = text.splice(2, text.length).join(" ");
 
-    const res = await axios({ method: 'GET', url: searchUrl + nombreAnime }).then(res => { return (<queryResponse>res.data).results[0] });
+    const res = await axios({ method: 'GET', url: searchUrl + animeName }).then(res => { return (<queryResponse>res.data).results[0] });
 
     const image = async () => {
         const embed = new MessageEmbed();
-        const canvas = Canvas.createCanvas(400, 800);
+        const canvas = Canvas.createCanvas(400, 600);
         const ctx = canvas.getContext('2d');
 
         /*         Background            */
         ctx.beginPath();
-        const fondo = await Canvas.loadImage('./public/images/FondoAnime.jpg');
-        ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+        const background = await Canvas.loadImage('./public/images/FondoAnime.jpg');
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         ctx.closePath();
         /*            Status             */
         ctx.beginPath();
+        ctx.font = '15px MPLUS';
         if (res.airing) {
             ctx.fillStyle = "#FCBF00";
             ctx.fillText("Airling", 210, 180)
@@ -78,16 +79,16 @@ export default async (message: Message) => {
         ctx.fillStyle = '#FFFFFF'
 
         if (res.start_date) ctx.fillText(`Start: ${res.start_date.slice(0, 10)}`, 210, 200);
-        if (res.end_date) ctx.fillText(`Termina: ${res.end_date.slice(0, 10)}`, 210, 220);
+        if (res.end_date) ctx.fillText(`End: ${res.end_date.slice(0, 10)}`, 210, 220);
         ctx.closePath();
         /*            Episodes            */
         ctx.beginPath();
         ctx.font = '15px MPLUS';
         ctx.fillStyle = '#FFFFFF';
         if (res.episodes === 0) {
-            ctx.fillText(`Episodios: Not yet`, 210, 240)
+            ctx.fillText(`Episodes: Not yet`, 210, 240)
         } else {
-            ctx.fillText(`Episodios: ${res.episodes}`, 210, 240)
+            ctx.fillText(`Episodes: ${res.episodes}`, 210, 240)
         }
         ctx.closePath();
         /*              Image             */
@@ -114,11 +115,15 @@ export default async (message: Message) => {
         ctx.closePath();
 
         /*               Send               */
-        const attachment = new MessageAttachment(canvas.toBuffer(), 'Anime.jpg');
-        embed.setImage(attachment.url);
+        
+        const attachment = new MessageAttachment(<BufferResolvable>canvas.toBuffer(), 'Anime.jpg');
+        
+        embed.setImage('attachment://Anime.jpg');
         embed.setColor(colors.get(res.type)?.color || <ColorResolvable>'GREEN');
-
-        return embed;
-    } 
-    message.channel.send({embeds: [await image()]});
+        return {embed: embed, attachment: attachment};
+    }
+    
+    const {embed, attachment} = await image();
+    
+    message.channel.send({embeds: [embed], files: [attachment]});
 }
