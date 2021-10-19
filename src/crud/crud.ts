@@ -84,7 +84,7 @@ const Crud = new class {
         };
         return res;
     };
-    async getServerPrefix(serverID: string | number): Promise<String> {
+    async getServerPrefix(serverID: string | number): Promise<String | string> {
         try {
             const cnt = await connection();
             const [response, _] = await cnt.query<RowDataPacket[]>(`Select prefix FROM servers WHERE sv_id = ${serverID}`);
