@@ -26,12 +26,9 @@ export default () => {
             .setURL('https://youtu.be/dQw4w9WgXcQ')
             .setAuthor(client.user?.username!, client.user?.avatarURL() || 'https://cdn.discordapp.com/app-icons/879945146869899294/82f01e5d30f012279d2a3c4430b0a27b.png?size=256')
             .setColor('GREEN')
-            .setDescription('**English**\n\n Hello everyone again, thanks for inviting me to this server, ' +
+            .setDescription('\n\n Hello everyone again, thanks for inviting me to this server, ' +
                 'You can use the `waifu help` command to see the list of commands and the `waifu init`' +
-                'command if you are an administrator to install the moderation settings.\n\n' +
-                '**Español**\n\n Hola a todos de nuevo, gracias por invitarme a este server, Puedes usar ' +
-                'el comando `waifu comandos` para ver toda la lista de comandos y el comando `waifu init`' +
-                'si ere administrador para configurar el mode de moderacion del bot');
+                'command if you are an administrator to install the moderation settings.');
 
         guild?.systemChannel?.send({ embeds: [embed] });
     });
@@ -47,7 +44,7 @@ export default () => {
         }
         if(content[0] == prefix){
             const func = cmd.get(content[1]);
-            if (func) func(message);
+            if (func) func.method(message);
         };
     });
     client.login(process.env.discord_token);
