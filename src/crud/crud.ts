@@ -29,7 +29,7 @@ const Crud = new class {
         try {
             const cnt = await connection();
             await cnt.query(`INSERT INTO usrs_srvs(usr_id, sv_id) Values(${userID}, ${serverID})`).catch(async (e) => {
-                if (e.code == 'ER_NO_REFERENCED_ROW_2'){
+                if (e.code == 'ER_NO_REFERENCED_ROW_2') {
                     await this.putUser(userID);
                     this.userJoin(serverID, userID);
                 }
@@ -65,61 +65,62 @@ const Crud = new class {
             const nextlevel: number = (10 * (level * level)) + Math.pow(10 * (level + 1), 2);
 
             total_xp += xp;
-
+    
             if (nextlevel > total_xp) {
-                level += 1;
-                await cnt.query(`Update usrs_srvs set sv_t_xp = ${xp} ${where}`);
+                await cnt.query(`Update usrs_srvs set sv_t_xp = ${total_xp} ${where}`);
                 res = 0;
             } else {
-                await cnt.query(`Update usrs_srvs set sv_t_xp = ${xp}, act_level = ${level} ${where}`)
+                level += 1;
+                await cnt.query(`Update usrs_srvs set sv_t_xp = ${total_xp}, act_level = ${level} ${where}`)
                 res = 1;
             };
 
             cnt.end();
         } catch (e: userNoExist | any) {
-            if(e.type){
+            if (e.type) {
                 this.userJoin(serverID, userID)
             }
             res = 2;
         };
         return res;
     };
-    async getServerPrefix(serverID: string | number): Promise<string> {
-        try {
-            const cnt = await connection();
-            const [response, _] = await cnt.query<RowDataPacket[]>(`Select prefix FROM servers WHERE sv_id = ${serverID}`);
-            cnt.end();
-            return response[0]['prefix'];
-        } catch (e) {
-            console.log(e);
-            return "error" + e;
-        }
-    };
-    async setServerPrefix(serverID: string | number, newPrefix: String) {
-        try {
-            const cnt = await connection();
-            await cnt.query(`Update servers set prefix = '${newPrefix}' WHERE sv_id = ${serverID}`);
-            cnt.end();
-        } catch (e) {
-            console.log(e);
-        }
-    };
     async deleteServer(serverID: string | number) {
         try {
             const cnt = await connection();
-            await cnt.query(`Delete From servers where sv_id = ${serverID}`)
+            await cnt.query(`Delete From servers where sv_id = ${serverID}`);
         } catch (e) {
             console.log(e);
         }
     };
+    async getColunm(channelType: serverColum, serverID: string | number): Promise<string> {
+        try {
+            const cnt = await connection();
+            const [response, _] = await cnt.query<RowDataPacket[]>(`Select sv_id ,${channelType} from servers where sv_id = ${serverID}`);
+            cnt.end();
+            return response[0][channelType]
+        } catch (e) {
+            return "error " + e;
+        }
+    }
+    async setColunm(channelType: serverColum, serverID: string | number, dt: number | string) {
+        const data = channelType == 'prefix' ? `"${dt}"` : dt;
+        try {
+            const cnt = await connection();
+            await cnt.query(`Update servers set ${channelType} = ${data} where sv_id = ${serverID}`);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 };
 
-class userNoExist  {
+type serverColum = 'customizer_channel' | 'log_channel' | 'wlecome_channel' | 'prefix';
+
+class userNoExist {
     serverID: Number | string;
     userID: Number | string;
     public type = "error";
 
-    constructor(server: Number | string, user: Number | string){
+    constructor(server: Number | string, user: Number | string) {
         this.serverID = server;
         this.userID = user;
     }
