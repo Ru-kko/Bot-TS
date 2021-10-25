@@ -36,11 +36,6 @@ export default async (channel: Channel) => {
     }
 };
 
-interface targetChannel {
-    id: string;
-    name: string;
-}
-
 interface channelJSON {
     type: ChannelTypes;
     guildId: string;
