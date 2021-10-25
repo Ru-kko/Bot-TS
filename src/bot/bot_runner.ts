@@ -1,6 +1,7 @@
 import discordjs, { Guild } from 'discord.js';
 import crud from '../crud/crud';
 import cmd from './commands';
+import channelDelete from './events/channelDelete';
 
 const client = new discordjs.Client({
     intents: [
@@ -17,7 +18,7 @@ export default () => {
         console.log(`Bot ready`);
     });
     client.on('guildCreate', async guild => {
-        await crud.putServer(guild?.id).catch(async ()=>{
+        await crud.putServer(guild?.id).catch(async () => {
             await crud.deleteServer(guild?.id);
             crud.putServer(guild?.id);
         });
@@ -33,20 +34,21 @@ export default () => {
         guild?.systemChannel?.send({ embeds: [embed] });
     });
     client.on("message", async message => {
-        if(message.author.bot) return;
+        if (message.author.bot) return;
 
 
-        var prefix:String = await crud.getServerPrefix(message.guild!.id) || "waifu";
+        var prefix: String = await crud.getColunm('prefix', message.guild!.id) || "waifu";
         const content = message.content.split(" ");
 
-        if(message.guild){
+        if (message.guild) {
             crud.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5)
         }
-        if(content[0] == prefix){
+        if (content[0] == prefix) {
             const func = cmd.get(content[1]);
             if (func) func.method(message);
         };
     });
+    client.on('channelDelete', channelDelete);
     client.login(process.env.discord_token);
 };
 

@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed, Permissions } from "discord.js";
 import Crud from "../../crud/crud";
 
 export default async (message: Message) => {
@@ -15,19 +15,25 @@ export default async (message: Message) => {
             const group = await guild.channels.create('STAF', {
                 type: 'GUILD_CATEGORY', permissionOverwrites: [{
                     id: guild.id,
-                    allow: ['ADMINISTRATOR', 'MANAGE_CHANNELS']
+                    allow: [
+                        Permissions.FLAGS.ADMINISTRATOR,
+                        Permissions.FLAGS.MANAGE_CHANNELS,
+                        Permissions.FLAGS.MANAGE_GUILD],
+                    deny: [
+                        Permissions.FLAGS.VIEW_CHANNEL
+                    ]
                 }]
             });
 
-            if (configCh != '0') return;
-
-            await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
-                await Crud.setColunm('customizer_channel', channel.id, guild.id);
-            });
+            if (configCh == '0') {
+                await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
+                    await Crud.setColunm('customizer_channel', channel.id, guild.id);
+                });
+            };
 
             if (logCh != '0') return;
-            
-            await guild.channels.create('Info', { type: 'GUILD_NEWS', parent: group }).then(async channel => {
+
+            await guild.channels.create('Info', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
                 const embed = new MessageEmbed()
                     .setAuthor(message.author.username, message.author.avatarURL()!)
                     .setColor('GREEN')
