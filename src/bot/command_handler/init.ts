@@ -1,9 +1,14 @@
 import { Message, MessageEmbed } from "discord.js";
+import Crud from "../../crud/crud";
 
 export default async (message: Message) => {
     const guild = message.guild;
 
     if (guild) {
+
+        const logCh = await Crud.getColunm('log_channel', guild.id);
+        const configCh = await Crud.getColunm('customizer_channel', guild.id);
+
         const member = await guild.members.fetch(message.author.id);
 
         if (member.permissions.has('MANAGE_CHANNELS' || 'ADMINISTRATOR')) {
@@ -13,16 +18,23 @@ export default async (message: Message) => {
                     allow: ['ADMINISTRATOR', 'MANAGE_CHANNELS']
                 }]
             });
-            await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then((channel) =>{
-                // TODO
+
+            if (configCh != '0') return;
+
+            await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
+                await Crud.setColunm('customizer_channel', channel.id, guild.id);
             });
-            await guild.channels.create('Info', { type: 'GUILD_NEWS' , parent: group}).then((channel) => {
+
+            if (logCh != '0') return;
+            
+            await guild.channels.create('Info', { type: 'GUILD_NEWS', parent: group }).then(async channel => {
                 const embed = new MessageEmbed()
                     .setAuthor(message.author.username, message.author.avatarURL()!)
                     .setColor('GREEN')
                     .setDescription(`<@${message.author.id}> was start moderation settings`)
                     .setTimestamp(Date.now());
-                channel.send({embeds: [embed]})
+                await Crud.setColunm('log_channel', guild.id, channel.id);
+                channel.send({ embeds: [embed] });
             });
         }
     }
