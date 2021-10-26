@@ -13,7 +13,7 @@ const commandMap: Map<string, commandSpesifications> = new Map();
 commandMap.set("anime", {method: animeFind, description: 'Find an anime wiht same or similar name'});
 commandMap.set("help", {method: help, description: 'Show normal user commands'});
 commandMap.set("prefix", {method: changePrefix, description: 'Show server prefix, if you are an admin you can change them'});
-commandMap.set("init", {method: init, admin: true, description: 'If you\'re an admind '});
+commandMap.set("init", {method: init, admin: true, description: 'If you\'re an admin'});
 
 export interface commandSpesifications {
     method: (msg: Message) => Promise<void>;
