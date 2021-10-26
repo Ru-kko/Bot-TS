@@ -27,7 +27,7 @@ export default async (message: Message) => {
 
             if (configCh == '0') {
                 await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
-                    await Crud.setColunm('customizer_channel', channel.id, guild.id);
+                    await Crud.setColunm('customizer_channel', guild.id, channel.id);
                 });
             };
 

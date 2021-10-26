@@ -17,7 +17,7 @@ commandMap.set("init", {method: init, admin: true, description: 'If you\'re an a
 
 export interface commandSpesifications {
     method: (msg: Message) => Promise<void>;
-    description?: string;
+    description: string;
     admin?: Boolean;
 }
 export default commandMap;
