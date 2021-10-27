@@ -1,5 +1,6 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed, TextBasedChannels } from "discord.js";
 import Crud from "../../crud/crud";
+import { client } from "../bot_runner";
 
 export default async (message: Message) => {
     const guild = message.guild;
@@ -10,6 +11,21 @@ export default async (message: Message) => {
                 const member = await guild.members.fetch(message.author.id);
                 if (member.permissions.has('ADMINISTRATOR')) {
                     await Crud.setColunm('prefix', guild.id, msg[2]);
+
+                    const logId = await Crud.getColunm('log_channel', guild.id);
+
+                    if (logId != '0') {
+                        const _channel = <TextBasedChannels>client.channels.cache.find(ch => ch.id == logId)!;
+
+                        const embed = new MessageEmbed()
+                            .setAuthor(member.displayName, message.author.avatarURL()!)
+                            .setDescription(`<@${message.author.id}> was changed prefix **${msg[0]}** to **${msg[2]}**`)
+                            .setColor('BLUE')
+                            .setTimestamp(Date.now());
+
+                        await _channel.send({ embeds: [embed] });
+                    }
+
                     message.reply('the prefix was changed')
                 };
             } else {
