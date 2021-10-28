@@ -4,25 +4,12 @@ import Resizer from './methods/textResizer';
 
 import { Message, MessageEmbed, MessageAttachment, ColorResolvable, BufferResolvable } from 'discord.js';
 import axios from 'axios';
+import { animeInf } from './Interfaces/interfaces';
 
 interface queryResponse {
     results: animeInf[]
 }
-interface animeInf {
-    mal_id: number;
-    url: string;
-    image_url: string;
-    title: string;
-    airing: boolean;
-    synopsis: string;
-    type: 'TV' | 'OVA' | 'Movie' | 'Special' | 'ONA' | 'Music';
-    episodes: number;
-    score: number;
-    start_date: string | null;
-    end_date: string | null;
-    members: number;
-    rated: string;
-}
+
 interface StatusColor {
     color: string & ColorResolvable;
     text: string;
