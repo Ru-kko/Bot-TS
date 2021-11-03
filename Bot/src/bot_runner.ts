@@ -1,7 +1,8 @@
-import discordjs, { Guild } from 'discord.js';
-import crud from '../crud/crud';
+import discordjs from 'discord.js';
+import axios from 'axios';
 import cmd from './commands';
 import channelDelete from './events/channelDelete';
+import { restContent } from './command_handler/Interfaces/interfaces';
 
 const client = new discordjs.Client({
     intents: [
@@ -18,10 +19,7 @@ export default () => {
         console.log(`Bot ready`);
     });
     client.on('guildCreate', async guild => {
-        await crud.putServer(guild?.id).catch(async () => {
-            await crud.deleteServer(guild?.id);
-            crud.putServer(guild?.id);
-        });
+        await axios.post(process.env.BackPaht! + `/server/${guild.id}`);
         const embed = new discordjs.MessageEmbed()
             .setTitle('Hi everyone!!')
             .setURL('https://youtu.be/dQw4w9WgXcQ')
@@ -37,11 +35,11 @@ export default () => {
         if (message.author.bot) return;
 
 
-        var prefix: String = await crud.getColunm('prefix', message.guild!.id) || "waifu";
+        var prefix = await axios.get(process.env.BackPaht + `/server/${message.guild!.id}/colunm/prefix`).then(inf => { return (<restContent>inf).colunm! });
         const content = message.content.split(" ");
 
         if (message.guild) {
-            crud.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5)
+            await axios.put(`${process.env.BackPaht}/members/updatexp/${message.author.id}/${message.guild.id}/${Math.round(Math.random() * (10 - 5)) + 5}`);
         }
         if (content[0] == prefix) {
             const func = cmd.get(content[1]);

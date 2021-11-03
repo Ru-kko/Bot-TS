@@ -1,7 +1,7 @@
 import { createPool, Pool } from 'mysql2/promise';
 
-export default async function(): Promise<Pool> {
-    const pool = await createPool({
+export async function connection(): Promise<Pool> {
+    const pool = createPool({
         host: 'localhost',
         database: process.env.Data_Base,
         user: process.env.DB_user,
