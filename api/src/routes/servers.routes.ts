@@ -35,7 +35,7 @@ serverRouter.get('/:serverId/colunm/:type', async (req, res) => {
         return;
     })
 })
-serverRouter.put('/:serverId/Channel/:type/:content', async (req, res) => {
+serverRouter.put('/:serverId/column/:type/:content', async (req, res) => {
     const serverID = req.params.serverId;
     const newContent = req.params.content;
     const colunm = <serverColum>req.params.type;
@@ -50,7 +50,7 @@ serverRouter.put('/:serverId/Channel/:type/:content', async (req, res) => {
         res.status(401).send({ error: 'forbbiden' });
     }
 })
-serverRouter.delete('/:serverId/Channel/:type', async (req, res) => {
+serverRouter.delete('/:serverId/column/:type', async (req, res) => {
     try {
         const serverID = req.params.serverId;
         const colunm = <serverColum>req.params.type;
