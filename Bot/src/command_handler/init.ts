@@ -7,8 +7,8 @@ export default async (message: Message) => {
 
     if (guild) {
 
-        const logCh = await axios.get(process.env.BackPaht! + `/server/${guild.id}/colunm/log_channel`).then(inf =>{return (<restContent>inf).colunm!});
-        const configCh =await axios.get(process.env.BackPaht! + `/server/${guild.id}/colunm/customizer_channel`).then(inf =>{return (<restContent>inf).colunm!});
+        const logCh = await axios.get(process.env.BackPaht! + `/server/${guild.id}/colunm/log_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
+        const configCh =await axios.get(process.env.BackPaht! + `/server/${guild.id}/colunm/customizer_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
 
         const member = await guild.members.fetch(message.author.id);
 
