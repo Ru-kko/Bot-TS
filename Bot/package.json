@@ -4,13 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -w",
-    "start": "node build/index.js",
-    "crud": "node build/Test/crud.test.js",
-    "bot": "node build/Test/bot.test.js",
-    "resizer": "node build/Test/textResizer.test.js",
-    "animeFind": "node build/Test/animeFetch.test.js",
-    "ip": "node build/Test/ipLogger.test.js"
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "",

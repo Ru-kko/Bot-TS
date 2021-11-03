@@ -8,7 +8,7 @@ export default async (message: Message) => {
     const _break = null;
     let count: number = 0;
 
-    const configCh = await await axios.get(process.env.BackPaht! + `/server/${message.guild!.id}/colunm/log_channel`).then(inf =>{return (<restContent>inf).colunm!});
+    const configCh = await axios.get(process.env.BackPaht! + `/server/${message.guild!.id}/colunm/log_channel`).then(inf =>{return (<restContent>inf).colunm!});
 
     if (message.channelId == configCh) {
         commandMap.forEach((i:commandSpesifications, k:string) => {

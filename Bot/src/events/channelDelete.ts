@@ -1,14 +1,15 @@
+import axios from "axios";
 import { Channel, MessageEmbed, TextBasedChannels } from "discord.js";
 import { ChannelTypes } from "discord.js/typings/enums";
-import Crud from "../../crud/crud";
-import { client } from "../bot_runner";
+import { client } from "..";
+import { restContent } from "../command_handler/Interfaces/interfaces";
 
 export default async (channel: Channel) => {
     const ch_json = <channelJSON>channel.toJSON();
 
-    const isLogCh = await Crud.getColunm('log_channel', ch_json.guildId);
-    const isConfi = await Crud.getColunm('customizer_channel', ch_json.guildId);
-    const isWelcome = await Crud.getColunm('wlecome_channel', ch_json.guildId);
+    const isLogCh = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/log_channel`).then(inf =>{return (<restContent>inf).colunm!});
+    const isConfi = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/customizer_channel`).then(inf =>{return (<restContent>inf).colunm!});
+    const isWelcome = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/wlecome_channel`).then(inf =>{return (<restContent>inf).colunm!});
 
     const author = await client.guilds.resolve(ch_json.guildId)!.fetchAuditLogs({ type: 'CHANNEL_DELETE' })
         .then(logs => { 
@@ -16,12 +17,12 @@ export default async (channel: Channel) => {
         });
 
     if (isLogCh == ch_json.id) {
-        await Crud.setColunm('log_channel', ch_json.guildId, 0);
+        await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/log_channel`)
     } else {
         if (isConfi == ch_json.id) {
-            await Crud.setColunm('log_channel', ch_json.guildId, 0);
+            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/customizer_channel`)
         }else if (isWelcome == ch_json.id) {
-            await Crud.setColunm('wlecome_channel', ch_json.guildId, 0)
+            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/wlecome_channel`)
         }
 
         if (isLogCh != '0') {

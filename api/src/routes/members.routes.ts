@@ -19,3 +19,5 @@ memberRouter.put('/updatexp/:user/:server/:xp', async (req, res) => {
 
     res.status(201).send({ status: responseType[0], message: responseType[1] });
 })
+
+export default memberRouter;

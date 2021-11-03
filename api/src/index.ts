@@ -1,6 +1,7 @@
 import express, { Application, json, urlencoded } from "express";
 import env from 'dotenv';
 import servers from "./routes/servers.routes";
+import memberRouter from "./routes/members.routes";
 
 const server = new class{
     public app:Application;
@@ -22,6 +23,7 @@ const server = new class{
 
     routes(){
         this.app.use('/server', servers);
+        this.app.use('/members', memberRouter);
     }
 }
 

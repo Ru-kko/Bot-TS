@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Message, MessageEmbed, TextBasedChannels } from "discord.js";
-import { client } from "../bot_runner";
+import { client } from "..";
 import { restContent } from "./Interfaces/interfaces";
 
 export default async (message: Message) => {
