@@ -15,7 +15,7 @@ serverRouter.post('/:serverId', async (req, res) => {
         res.status(401).send({ error: 'forbbiden' });
     }
 })
-serverRouter.get('/:serverId/colunm/:type', async (req, res) => {
+serverRouter.get('/:serverId/:type', async (req, res) => {
     const type = <serverColum>req.params.type;
 
     res.set('Content-Type', 'application/json');
@@ -35,7 +35,7 @@ serverRouter.get('/:serverId/colunm/:type', async (req, res) => {
         return;
     })
 })
-serverRouter.put('/:serverId/column/:type/:content', async (req, res) => {
+serverRouter.put('/:serverId/:type/:content', async (req, res) => {
     const serverID = req.params.serverId;
     const newContent = req.params.content;
     const colunm = <serverColum>req.params.type;
@@ -50,7 +50,7 @@ serverRouter.put('/:serverId/column/:type/:content', async (req, res) => {
         res.status(401).send({ error: 'forbbiden' });
     }
 })
-serverRouter.delete('/:serverId/column/:type', async (req, res) => {
+serverRouter.delete('/:serverId/:type', async (req, res) => {
     try {
         const serverID = req.params.serverId;
         const colunm = <serverColum>req.params.type;
@@ -66,8 +66,9 @@ serverRouter.delete('/:serverId/column/:type', async (req, res) => {
         if (colunm == 'prefix') {
             servers.setColunm('prefix', serverID, 'waifu')
         } else {
-            servers.setColunm(colunm, serverID, colunm);
+            servers.setColunm(colunm, serverID, '0');
         }
+        res.status(204).send();
     } catch (e: any) {
         res.status(500).send({error: e.code})
     }
