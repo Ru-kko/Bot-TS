@@ -36,7 +36,7 @@ client.on('guildCreate', async guild => {
 client.on("message", async message => {
     if (message.author.bot) return;
 
-    var prefix = await axios.get(process.env.BackPaht + `/server/${message.guild!.id}/colunm/prefix`).then(inf => {return (<restContent>inf.data).colunm});
+    var prefix = await axios.get(process.env.BackPaht + `/server/${message.guild!.id}/prefix`).then(inf => {return (<restContent>inf.data).colunm});
     
     const content = message.content.split(" ");
 

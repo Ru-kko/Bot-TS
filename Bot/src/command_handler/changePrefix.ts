@@ -11,9 +11,9 @@ export default async (message: Message) => {
             if (msg[2].length <= 5 && msg[2].length > 0) {
                 const member = await guild.members.fetch(message.author.id);
                 if (member.permissions.has('ADMINISTRATOR')) {
-                    await axios.put(process.env.BackPaht! + `/server/${guild.id}/colunm/prefix/${msg[2]}`);
+                    await axios.put(process.env.BackPaht! + `/server/${guild.id}/prefix/${msg[2]}`);
 
-                    const logId = await axios.get(process.env.BackPaht! + `/server/${guild.id}/colunm/log_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
+                    const logId = await axios.get(process.env.BackPaht! + `/server/${guild.id}/log_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
 
                     if (logId != '0') {
                         const _channel = <TextBasedChannels>client.channels.cache.find(ch => ch.id == logId)!;
@@ -33,7 +33,7 @@ export default async (message: Message) => {
                 message.reply('the prefix cannot have more than 5 characters and less than 1')
             }
         } else {
-            const prx = await axios.get(process.env.BackPaht + `/server/${guild.id}/colunm/prefix`).then(inf =>{return  (<restContent>inf.data).colunm!});
+            const prx = await axios.get(process.env.BackPaht + `/server/${guild.id}/prefix`).then(inf =>{return  (<restContent>inf.data).colunm!});
             message.reply('the prefix is ' + prx);
         }
     }

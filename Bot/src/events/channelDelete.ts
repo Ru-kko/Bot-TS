@@ -7,9 +7,9 @@ import { restContent } from "../command_handler/Interfaces/interfaces";
 export default async (channel: Channel) => {
     const ch_json = <channelJSON>channel.toJSON();
 
-    const isLogCh = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/log_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
-    const isConfi = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/customizer_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
-    const isWelcome = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/wlecome_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
+    const isLogCh = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/log_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
+    const isConfi = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/customizer_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
+    const isWelcome = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/wlecome_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
 
     const author = await client.guilds.resolve(ch_json.guildId)!.fetchAuditLogs({ type: 'CHANNEL_DELETE' })
         .then(logs => { 
@@ -17,12 +17,12 @@ export default async (channel: Channel) => {
         });
 
     if (isLogCh == ch_json.id) {
-        await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/log_channel`)
+        await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/log_channel`)
     } else {
         if (isConfi == ch_json.id) {
-            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/customizer_channel`)
+            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/customizer_channel`)
         }else if (isWelcome == ch_json.id) {
-            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/colunm/wlecome_channel`)
+            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/wlecome_channel`)
         }
 
         if (isLogCh != '0') {
