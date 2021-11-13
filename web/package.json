@@ -1,0 +1,28 @@
+{
+  "name": "router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "dev": "tsc && webpack --mode development",
+    "build": "tsc && webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jquery": "^3.5.8",
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/react": "^17.0.34",
+    "@types/react-dom": "^17.0.11",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
