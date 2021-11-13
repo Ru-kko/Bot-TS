@@ -1,14 +1,13 @@
-import axios from "axios";
 import { Message, MessageEmbed, Permissions } from "discord.js";
-import { restContent } from "./Interfaces/interfaces";
+import { servers } from "../../crud/tables/servers";
 
 export default async (message: Message) => {
     const guild = message.guild;
 
     if (guild) {
 
-        const logCh = await axios.get(process.env.BackPaht! + `/server/${guild.id}/log_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
-        const configCh =await axios.get(process.env.BackPaht! + `/server/${guild.id}/customizer_channel`).then(inf =>{return (<restContent>inf.data).colunm || '0'});
+        const logCh = await servers.getColunm('log_channel', guild.id);
+        const configCh = await servers.getColunm('customizer_channel', guild.id);
 
         const member = await guild.members.fetch(message.author.id);
 
@@ -28,7 +27,7 @@ export default async (message: Message) => {
 
             if (configCh == '0') {
                 await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
-                    await axios.put(process.env.BackPaht! + `/server/${guild.id}/customizer_channel/${channel.id}`)
+                    await servers.setColunm('customizer_channel', guild.id, channel.id);
                 });
             };
 
@@ -40,7 +39,7 @@ export default async (message: Message) => {
                     .setColor('GREEN')
                     .setDescription(`<@${message.author.id}> was start moderation settings`)
                     .setTimestamp(Date.now());
-                await axios.put(process.env.BackPaht! + `/server/${guild.id}/log_channel/${channel.id}`)
+                await servers.setColunm('log_channel', guild.id, channel.id);
                 channel.send({ embeds: [embed] });
             });
         }

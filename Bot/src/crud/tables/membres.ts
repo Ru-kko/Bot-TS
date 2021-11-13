@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { connection } from "../connection"
+import connection  from "../connection"
 import users from "./users";
 
 const members = new class {

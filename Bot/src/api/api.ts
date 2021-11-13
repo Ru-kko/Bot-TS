@@ -1,34 +1,32 @@
-import express, { Application, json, urlencoded } from "express";
-import env from 'dotenv';
+import express, { Application, json, urlencoded } from 'express';
 import servers from "./routes/servers.routes";
-import memberRouter from "./routes/members.routes";
+import memberRouter from "./routes/membres.routes";
 
-const server = new class{
+const server = new class server{
     public app:Application;
 
     constructor(){
         this.app = express();
     }
 
-    start(){
+    start(): server{
         this.app.listen(process.env.PORT, () => {
             console.log("Server running on port " + process.env.PORT);
         });
+        return this;
     }
 
-    middlewares(){
+    middlewares(): server{
         this.app.use(json());
         this.app.use(urlencoded({extended: false}));
+        return this;
     }
 
-    routes(){
+    routes(): server{
         this.app.use('/server', servers);
         this.app.use('/members', memberRouter);
+        return this;
     }
 }
 
-env.config();
-
-server.start();
-server.middlewares();
-server.routes();
+export default server;

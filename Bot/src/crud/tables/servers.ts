@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { connection } from "../connection";
+import connection from "../connection";
 
 
 const servers = new class {
@@ -48,4 +48,4 @@ const servers = new class {
 type serverColum = 'customizer_channel' | 'log_channel' | 'wlecome_channel' | 'prefix';
 
 
-export { servers , serverColum};
+export { servers , serverColum };

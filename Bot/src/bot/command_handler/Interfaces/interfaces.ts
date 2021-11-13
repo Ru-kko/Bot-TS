@@ -17,7 +17,3 @@ export interface animeInf {
     members: number;
     rated: string;
 }
-export interface restContent {
-    error? : string;
-    colunm? : string | number;
-}

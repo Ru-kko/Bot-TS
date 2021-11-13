@@ -1,4 +1,4 @@
-import { connection } from "../connection";
+import connection  from "../connection";
 
 const users = new class {
     async putUser(userID: number | String): Promise<void> {

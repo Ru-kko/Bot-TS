@@ -1,14 +1,13 @@
 import { ColorResolvable, Message, MessageEmbed } from "discord.js";
-import axios from "axios";
+import { servers } from "../../crud/tables/servers";
 import commandMap, { commandSpesifications } from "../commands";
-import { restContent } from "./Interfaces/interfaces";
 
 export default async (message: Message) => {
     let newMsg = '';
     const _break = null;
     let count: number = 0;
 
-    const configCh = await axios.get(process.env.BackPaht! + `/server/${message.guild!.id}/log_channel`).then(inf =>{return (<restContent>inf.data).colunm!});
+    const configCh = await servers.getColunm('customizer_channel', message.guildId!);
 
     if (message.channelId == configCh) {
         commandMap.forEach((i:commandSpesifications, k:string) => {

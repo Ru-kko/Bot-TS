@@ -1,15 +1,14 @@
-import axios from "axios";
 import { Channel, MessageEmbed, TextBasedChannels } from "discord.js";
 import { ChannelTypes } from "discord.js/typings/enums";
-import { client } from "..";
-import { restContent } from "../command_handler/Interfaces/interfaces";
+import { servers } from "../../crud/tables/servers";
+import { client } from "../bot_runner";
 
 export default async (channel: Channel) => {
     const ch_json = <channelJSON>channel.toJSON();
 
-    const isLogCh = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/log_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
-    const isConfi = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/customizer_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
-    const isWelcome = await axios.get(process.env.BackPaht! + `/server/${ch_json.guildId}/wlecome_channel`).then(inf =>{return (<restContent>inf.data).colunm! || '0'});
+    const isLogCh = await servers.getColunm('log_channel', ch_json.guildId);
+    const isConfi = await servers.getColunm('customizer_channel', ch_json.guildId);
+    const isWelcome = await servers.getColunm('wlecome_channel', ch_json.guildId);
 
     const author = await client.guilds.resolve(ch_json.guildId)!.fetchAuditLogs({ type: 'CHANNEL_DELETE' })
         .then(logs => { 
@@ -17,12 +16,12 @@ export default async (channel: Channel) => {
         });
 
     if (isLogCh == ch_json.id) {
-        await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/log_channel`)
+        await servers.setColunm('log_channel', ch_json.guildId, 0);
     } else {
         if (isConfi == ch_json.id) {
-            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/customizer_channel`)
+            await servers.setColunm('log_channel', ch_json.guildId, 0);
         }else if (isWelcome == ch_json.id) {
-            await axios.delete(process.env.BackPaht! + `/server/${ch_json.guildId}/wlecome_channel`)
+            await servers.setColunm('wlecome_channel', ch_json.guildId, 0)
         }
 
         if (isLogCh != '0') {
