@@ -1,10 +1,13 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import path from 'path'
+import cors from 'cors';
 
 const dir = path.join(__dirname + '/../static'); 
 const app = express();
 
-app.use(express.static(dir))
+app.use(express.static(dir));
+app.use(cors());
+app.use(urlencoded({extended: false}));
 
 app.listen(8080, () => console.log('Listening'));
 
