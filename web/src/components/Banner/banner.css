@@ -1,0 +1,43 @@
+.Banner{
+    display: grid;
+    grid-template-columns: 2fr 1.75fr;
+    margin: 30px;
+    justify-items: center;
+    align-items: center;
+}
+
+.Banner-Message{
+    padding: 50px;
+    width: 75%;
+    text-align: left;
+    background-color: #23272a;
+    border-radius: 15px;
+}
+
+.Banner-Message > p {
+    color: #99AAB5;
+    font-size: small;
+    font-family: monospace;
+}
+.invite-BTN {
+    color: white;
+    background-color: #7289DA;
+    padding: 15px 20px;
+    font-size: large;
+    border-radius: 50px;
+}
+
+.invite-BTN:hover{
+    background-color: #5d78d6;
+}
+.Banner_btns{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.banner-cmd-link{
+    margin-top: 5px;
+    font-size: small;
+    color: #99AAB5;
+}
