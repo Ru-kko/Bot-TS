@@ -1,0 +1,27 @@
+.foot{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.networks{
+    display: flex;
+    justify-content: baseline;
+}
+.footlinks > li {
+    margin: 5px;
+    font-size: large;
+}
+
+.footBtn {
+    margin: 15px;
+    color: #131618;
+}
+.footBtn > svg > path {
+    fill: #131618
+}
+.footBtn:hover > svg > path {
+    fill: #99AAB5
+}
+.footBtn:hover {
+    color: #99AAB5;
+}

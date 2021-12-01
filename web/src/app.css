@@ -1,0 +1,20 @@
+body{
+    background-color: #23272a;
+    font-weight: bold;
+    font-family: 'M PLUS 1 Code', sans-serif;
+    padding: 0px;
+    margin: 0px;
+}
+li{
+    list-style: none;
+}
+ul{
+    padding: 0;
+}
+a{
+    text-decoration: none;
+}
+footer{
+    justify-items: center;
+    align-items: center;
+}
