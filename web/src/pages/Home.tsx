@@ -1,9 +1,10 @@
 import React from 'react'
+import Banner from '../components/Banner/Banner';
 
 const Home: React.FC = () => {
   return (
     <>
-        <h1>Reload Test</h1>
+        <Banner />
     </>
   )
 }
