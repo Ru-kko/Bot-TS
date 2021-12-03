@@ -1,5 +1,6 @@
 .Banner{
     display: grid;
+    min-height: 50vh;
     grid-template-columns: 2fr 1.75fr;
     margin: 30px;
     justify-items: center;

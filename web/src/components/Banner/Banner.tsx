@@ -1,5 +1,6 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
+import values from '../../values/values'
+import Line from '../Horizontal_line/Line'
 import './banner.css'
 
 export default class Banner extends Component {
@@ -14,11 +15,11 @@ export default class Banner extends Component {
                         </p>
                     </div>
                     <div className='Banner_btns'>
-                        <a href='#' className='invite-BTN'>Add in you server</a>
-                        <Link to='/commands' className='banner-cmd-link'>commands</Link>
+                        <a href= {values.Discord.Invite} className='invite-BTN'>Add in you server</a>
+                        <a href = {values.Discord.Auth} className='banner-cmd-link'>login with discord</a>
                     </div>
                 </div>
-                
+                <Line/>
             </>
         )
     }
