@@ -1,0 +1,10 @@
+.message-bar{
+    padding: 20px;
+}
+.message-bar > div{
+    background-color: #40444b;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 1.5vh;
+}
