@@ -13,15 +13,16 @@
 }
 
 .footBtn {
+    font-weight: 700;
     margin: 15px;
-    color: #131618;
+    color: #62656B;
 }
 .footBtn > svg > path {
-    fill: #131618
+    fill: #62656B
 }
 .footBtn:hover > svg > path {
-    fill: #99AAB5
+    fill: #B9BBBE
 }
 .footBtn:hover {
-    color: #99AAB5;
+    color: #B9BBBE;
 }

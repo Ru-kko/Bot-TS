@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700&display=swap');
+
 body{
     background-color: #23272a;
     font-weight: bold;
-    font-family: 'M PLUS 1 Code', sans-serif;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-weight: 300;
     padding: 0px;
     margin: 0px;
 }
