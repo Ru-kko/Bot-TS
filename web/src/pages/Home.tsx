@@ -6,6 +6,8 @@ const Home: React.FC = () => {
   return (
     <>
         <Banner />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         <Bar/>
     </>
   )

@@ -16,4 +16,4 @@ ReactDOM.render(
         <Footer />
     </Router >,
     document.getElementById("app")
-)
+);
