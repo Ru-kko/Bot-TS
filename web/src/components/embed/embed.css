@@ -1,0 +1,31 @@
+.embed{
+    background-color: #2F3136;
+    border-radius: 5px;
+    margin: 20px 5px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+.embed-line{
+    width: 1vh;
+}
+.embed-content{
+    display: flex;
+    flex-direction: column;
+    padding: 1vh 2vh ;
+}
+.embed-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: large;
+}
+.embed img {
+    height: 2em;
+    width: 2em;
+    margin-right: 2vh;
+    border-radius: 50%;
+}
+.embed-content {
+    padding: 1v 2vh;
+}
