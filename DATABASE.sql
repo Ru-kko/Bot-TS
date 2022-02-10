@@ -64,3 +64,23 @@ CREATE TABLE IF NOT EXISTS usrs_srvs(
     CONSTRAINT srv_fk
         FOREIGN KEY (sv_id) REFERENCES servers(sv_id)
 );
+
+-- Sessions Storage
+
+CREATE TABLE IF NOT EXISTS sessions_storage(
+    ssid VARCHAR(70) NOT NULL PRIMARY KEY,
+    code VARCHAR(30) NOT NULL,
+    userid BIGINT(18) NOT NULL,
+    maxAge BIGINT NOT NULL,
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT user_sess_fk
+        FOREIGN KEY (userid) REFERENCES users(usr_id)
+
+);
+
+CREATE EVENT AutoDeleteSessions
+    ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 DAY
+    ON COMPLETION PRESERVE 
+    DO 
+        DELETE FROM sessions_storage WHERE create_at < DATE_SUB(NOW(), INTERVAL 30 DAY);
