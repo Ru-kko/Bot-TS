@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, TextBasedChannels } from "discord.js";
+import { Message, MessageEmbed, TextBasedChannel } from "discord.js";
 import { servers } from "../../crud/tables/servers";
 import { client } from "../bot_runner";
 
@@ -15,7 +15,7 @@ export default async (message: Message) => {
                     const logId = await servers.getColunm('log_channel', guild.id);
 
                     if (logId != '0') {
-                        const _channel = <TextBasedChannels>client.channels.cache.find(ch => ch.id == logId)!;
+                        const _channel = <TextBasedChannel>client.channels.cache.find(ch => ch.id == logId)!;
 
                         const embed = new MessageEmbed()
                             .setAuthor(member.displayName, message.author.avatarURL()!)

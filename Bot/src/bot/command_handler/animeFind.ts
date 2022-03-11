@@ -4,7 +4,7 @@ import Resizer from './methods/textResizer';
 
 import { Message, MessageEmbed, MessageAttachment, ColorResolvable, BufferResolvable } from 'discord.js';
 import axios from 'axios';
-import { animeInf } from './Interfaces/interfaces';
+import { animeInf } from '../../../../types/bot/anime'
 
 interface queryResponse {
     results: animeInf[]

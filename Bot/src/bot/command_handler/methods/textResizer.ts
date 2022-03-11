@@ -1,13 +1,5 @@
 import {CanvasRenderingContext2D as context } from "canvas";
-
-interface textBoxOptions{
-    x: number;
-    y: number;
-    width: number;
-    rows: number;
-    textSize?: number;
-    color?: string;
-}
+import type { textBoxOptions } from "../../../../../types/bot/canvas"
 
 export default (ctx:context, text: string, options:textBoxOptions) =>{
     ctx.beginPath();
