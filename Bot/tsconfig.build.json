@@ -6,7 +6,8 @@
     "extends": "./tsconfig.json",
     "exclude": [
       "spec/**/*.spec.ts",
-      "__test__",
+      "**/tests/**",
+      "**/*.spec.ts",
       "vitest.config.ts",
       "node_modules",
       "build"
