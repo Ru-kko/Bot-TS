@@ -1,4 +1,4 @@
-import { Channel, MessageEmbed, TextBasedChannels } from "discord.js";
+import { Channel, MessageEmbed, TextBasedChannel } from "discord.js";
 import { ChannelTypes } from "discord.js/typings/enums";
 import { servers } from "../../crud/tables/servers";
 import { client } from "../bot_runner";
@@ -30,7 +30,7 @@ export default async (channel: Channel) => {
                 .setDescription(`<@${author?.id}> was deleted channel **${ch_json.name}**`)
                 .setColor('GREEN')
                 .setTimestamp(Date.now());
-            const _channel = <TextBasedChannels>client.channels.cache.find(ch => ch.id == isLogCh)!;
+            const _channel = <TextBasedChannel>client.channels.cache.find(ch => ch.id == isLogCh)!;
             _channel?.send({embeds: [embed]});
         }
     }
