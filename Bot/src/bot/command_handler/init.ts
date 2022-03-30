@@ -1,13 +1,13 @@
 import { Message, MessageEmbed, Permissions } from "discord.js";
-import { servers } from "../../crud/tables/servers";
+import { Servers } from "../../crud/tables/servers";
 
 export default async (message: Message) => {
     const guild = message.guild;
 
     if (guild) {
+		const serverManager = new Servers();
+		const server = await serverManager.getServer(guild.id);
 
-        const logCh = await servers.getColunm('log_channel', guild.id);
-        const configCh = await servers.getColunm('customizer_channel', guild.id);
 
         const member = await guild.members.fetch(message.author.id);
 
@@ -25,13 +25,13 @@ export default async (message: Message) => {
                 }]
             });
 
-            if (configCh == '0') {
+            if (server.customizer_channel === 0) {
                 await guild.channels.create('Config', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
-                    await servers.setColunm('customizer_channel', guild.id, channel.id);
+					await serverManager.setColunm(['customizer_channel', parseInt(channel.id)], guild.id);
                 });
             };
 
-            if (logCh != '0') return;
+            if (server.log_channel !== 0) return;
 
             await guild.channels.create('Info', { type: 'GUILD_TEXT', parent: group }).then(async channel => {
                 const embed = new MessageEmbed()
@@ -39,9 +39,10 @@ export default async (message: Message) => {
                     .setColor('GREEN')
                     .setDescription(`<@${message.author.id}> was start moderation settings`)
                     .setTimestamp(Date.now());
-                await servers.setColunm('log_channel', guild.id, channel.id);
+				await serverManager.setColunm(['log_channel', parseInt(channel.id)], guild.id);
                 channel.send({ embeds: [embed] });
             });
         }
+		serverManager.close();
     }
 }

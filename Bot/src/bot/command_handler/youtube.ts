@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Message } from "discord.js";
 import { client } from "../bot_runner";
-import { application_response } from "./Interfaces/interfaces";
+import type { application_response } from "../../../../types/bot/anime"
 
 export default async (message:Message) => {
     if (message.member?.voice.channel) {

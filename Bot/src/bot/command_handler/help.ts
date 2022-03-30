@@ -1,15 +1,15 @@
 import { ColorResolvable, Message, MessageEmbed } from "discord.js";
-import { servers } from "../../crud/tables/servers";
+import { Servers } from "../../crud/tables/servers";
 import commandMap, { commandSpesifications } from "../commands";
 
 export default async (message: Message) => {
     let newMsg = '';
     const _break = null;
     let count: number = 0;
+	const serverManager = new Servers();
+    const configCh = (await serverManager.getServer(message.guildId!)).customizer_channel;
 
-    const configCh = await servers.getColunm('customizer_channel', message.guildId!);
-
-    if (message.channelId == configCh) {
+    if (message.channelId === String(configCh)) {
         commandMap.forEach((i:commandSpesifications, k:string) => {
             try{
                 if(i.admin && (k != "help")){
@@ -45,4 +45,5 @@ export default async (message: Message) => {
         .setColor(<ColorResolvable>'GREEN');
 
     message.channel.send({ embeds: [embed] });
+	serverManager.close();
 }
