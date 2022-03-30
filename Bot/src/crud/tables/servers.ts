@@ -1,51 +1,69 @@
-import { RowDataPacket } from "mysql2";
-import connection from "../connection";
+import { RowDataPacket } from "mysql2/promise";
+import { connection } from "../connection";
+import { Server } from "../../../../types/crud";
 
+class Servers extends connection {
+    public async getServer(ServerID: string | number, create?: boolean ): Promise<ServerResponse> {
+        const getter = async () =>  await this.cnt.query<ServerResponse[]>(
+            `SELECT * from servers WHERE sv_id = ${ServerID}`
+        );
+ 
+		const [res, _] = await getter();
+		if(res.length === 0 && create){
+			await this.putServer(ServerID);
+			const [newSv, _] = await getter();
+			return newSv[0];
+		}
+		
+        return res[0];
+    }
 
-const servers = new class {
-    async putServer(serverID: number | String) {
+    public async putServer(ServerID: string | number): Promise<void> {
         try {
-            const cnt = await connection();
-            await cnt.query(`INSERT INTO servers(sv_id) Values(${serverID})`);
-            cnt.end();
-        } catch (e) {
-            if ((e as Error).message == `Duplicate entry '${serverID}' for key 'servers.PRIMARY'`) {
-                throw new Error('This server already exits');
-            } else {
-                console.log(e);
-            }
+            await this.cnt.query(
+                `INSERT INTO servers(sv_id) Values (${ServerID})`
+            );
+        } catch (e: Error | any) {
+            if (!e.message.startsWith("Duplicate")) console.log(e);
         }
     }
-    async setColunm(channelType: serverColum, serverID: string | number, dt: number | string) {
-        const data = channelType == 'prefix' ? `"${dt}"` : dt;
-        try {
-            const cnt = await connection();
-            await cnt.query(`Update servers set ${channelType} = ${data} where sv_id = ${serverID}`);
-        } catch (e) {
-            console.log(e);
-        }
+
+    public async setColunm(
+        Colunm: colunm,
+        ServerID: string | number
+    ): Promise<void> {
+        let query: string;
+
+        if (typeof Colunm[1] === "number")
+            query = `${Colunm[0]} = ${Colunm[1]}`;
+        else query = `${Colunm[0]} = "${Colunm[1]}"`;
+
+        await this.cnt.query(
+            `Update servers SET ${query} WHERE sv_id = ${ServerID}`
+        );
     }
-    async getColunm(channelType: serverColum, serverID: string | number): Promise<string> {
-        try {
-            const cnt = await connection();
-            const [response, _] = await cnt.query<RowDataPacket[]>(`Select sv_id ,${channelType} from servers where sv_id = ${serverID}`);
-            cnt.end();
-            return response[0][channelType]
-        } catch (e) {
-            throw e;
-        }
+
+    public async cosfigWelcomeMessage(
+        ServerID: number | string,
+        Config: Object
+    ) {
+        // TODO Make them
     }
-    async deleteServer(serverID: string | number) {
-        try {
-            const cnt = await connection();
-            await cnt.query(`Delete From servers where sv_id = ${serverID}`);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+
+	public async deleteServer(ServerID: number | String): Promise<void> {
+		await this.cnt.query(`Delete from servers WHERE sv_id = ${ServerID}`);
+	}
 }
 
-type serverColum = 'customizer_channel' | 'log_channel' | 'wlecome_channel' | 'prefix';
+type colunm =
+    | ["prefix", string]
+    | ["notify_warn", number]
+    | ["muted_rol", number]
+    | ["log_channel", number]
+    | ["welcome_msg", 1 | 0]
+    | ["wlecome_channel", number]
+	| ["customizer_channel", number];
 
+interface ServerResponse extends RowDataPacket, Server {}
 
-export { servers , serverColum };
+export { Servers };

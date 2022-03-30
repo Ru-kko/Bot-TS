@@ -1,6 +1,6 @@
 import discordjs, { Guild } from 'discord.js';
-import members from '../crud/tables/membres';
-import { servers } from '../crud/tables/servers';
+import Members from '../crud/tables/membres';
+import { Servers } from '../crud/tables/servers';
 import cmd from './commands';
 import channelDelete from './events/channelDelete';
 
@@ -19,9 +19,11 @@ export default () => {
         console.log(`Bot ready`);
     });
     client.on('guildCreate', async guild => {
-        await servers.putServer(guild?.id).catch(async () => {
-            await servers.deleteServer(guild?.id);
-            servers.putServer(guild?.id);
+		const serverManager = new Servers();
+        await serverManager.putServer(guild?.id).catch(async () => {
+            await serverManager.deleteServer(guild?.id);
+            await serverManager.putServer(guild?.id);
+			serverManager.close();
         });
         const embed = new discordjs.MessageEmbed()
             .setTitle('Hi everyone!!')
@@ -36,18 +38,21 @@ export default () => {
     });
     client.on("message", async message => {
         if (message.author.bot) return;
+		const serverManager = new Servers();
+		const memberManager = new Members(serverManager);
+		const server = await serverManager.getServer(message.guild!.id, true);
 
 
-        var prefix: String = await servers.getColunm('prefix', message.guild!.id) || "waifu";
         const content = message.content.split(" ");
 
         if (message.guild) {
-            members.addXp(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5);
+            memberManager.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5);
         }
-        if (content[0] == prefix) {
+        if (content[0] === server.prefix) {
             const func = cmd.get(content[1]);
             if (func) func.method(message);
         };
+		memberManager.close();
     });
     client.on('channelDelete', channelDelete);
     client.login(process.env.discord_token);

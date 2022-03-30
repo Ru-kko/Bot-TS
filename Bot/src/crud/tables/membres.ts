@@ -1,76 +1,68 @@
-import { RowDataPacket } from "mysql2";
-import connection  from "../connection"
-import users from "./users";
+import { QueryError, RowDataPacket } from "mysql2";
+import { Member } from "../../../../types/crud";
+import { connection } from "../connection";
 
-const members = new class {
-    async newMember(userID: number | string, serverID: string | number,): Promise<void> {
+class Members extends connection {
+    public async memberJoin(
+        UserID: number | string,
+        ServerID: number | string
+    ): Promise<void> {
         try {
-            const cnt = await connection();
-            await cnt.query(`INSERT INTO usrs_srvs(usr_id, sv_id) Values(${userID}, ${serverID})`)
-                .catch(async e => {
-                    if (e.code == 'ER_NO_REFERENCED_ROW_2') {
-                        await users.putUser(userID);
-                        this.newMember(serverID, userID);
-                    }
-                });
-        } catch {/** NOTING */ }
+            await super.cnt.query(
+                "INSER INTO usrs_srvs(usr_id, sv_id) VALUES" +
+                    `(${UserID}, ${ServerID})`
+            );
+        } catch (e: QueryError | any) {
+            console.log(e);
+        }
     }
-    /**
-     * @param serverID 
-     * @param userID 
-     * @param xp 
-     * @returns **NUMBER**
-     * -0 whether the user conitinue in the same level
-     * -1 whether the user will level up
-     * -2 whether the query has an error
-     */
-    async addXp(serverID: string | number, userID: string | number, xp: number): Promise<[number, string]> {
-        var res: [number, string];
-        try {
-            const where = `WHERE usr_id = ${userID} AND sv_id = ${serverID}`;
 
-            const cnt = await connection();
-            const [response, _] = await cnt.query<RowDataPacket[]>(`SELECT sv_t_xp,act_level FROM usrs_srvs ${where}`);
-
-            if (response[0] == undefined) { cnt.end(); throw new userNoExist(serverID, userID) };
-
-            var [total_xp, level] = [response[0]['sv_t_xp'], response[0]['act_level']];
-
-
-            // method
-            const nextlevel: number = (10 * (level * level)) + Math.pow(10 * (level + 1), 2);
-
-            total_xp += xp;
-
-            if (nextlevel > total_xp) {
-                await cnt.query(`Update usrs_srvs set sv_t_xp = ${total_xp} ${where}`);
-                res = [0, 'Continue on same level'];
-            } else {
-                level += 1;
-                await cnt.query(`Update usrs_srvs set sv_t_xp = ${total_xp}, act_level = ${level} ${where}`)
-                res = [1, 'level up'];
-            };
-
-            cnt.end();
-        } catch (e: userNoExist | any) {
-            if (e.type) {
-                this.newMember(serverID, userID);
-            }
-            res = [2, 'New member'];
-        };
-        return res;
+    public async addXP(
+        UserID: number | string,
+        ServerID: string | number,
+        XP: number
+    ): Promise<boolean> {
+        const condition = `WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`;
+        const member = await super.cnt
+            .query<memberResponse[]>(
+                `SELECT sv_t_xp, act_level FROM usrs_srvs ` + condition
+            )
+            .then(async ([data, _]) => {
+                if (!data[0]) {
+                    await this.memberJoin(UserID, ServerID);
+                    return { sv_t_xp: 0, act_level: 0 };
+                }
+                return data[0];
+            });
+        const nextlevel =
+            10 * Math.pow(member.act_level!, 2) +
+            Math.pow(10 * (member.act_level! + 1), 2);
+        member.sv_t_xp! += XP;
+        if (nextlevel > member.sv_t_xp!) {
+            await super.cnt.query(
+                `UPDATE usrs_srvs SET sv_t_xp = ${member.sv_t_xp} ${condition}`
+            );
+            return false;
+        } else {
+            await super.cnt.query(
+                "UPDATE usrs_srvs SET " +
+                    `sv_t_xp = ${member.sv_t_xp!} act_level = ${member.act_level!} ` +
+                    condition
+            );
+            return true;
+        }
     }
+
+	public async getMember(UserID: number | string, ServerID: number | string, create?: boolean): Promise<Member>{
+		const [res, _] = await	super.cnt.query<memberResponse[]>(`SELECT * from usrs_srvs WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`);
+
+		if (!res[0] && create){
+			await this.memberJoin(UserID, ServerID);
+			return await this.getMember(UserID, ServerID);
+		}
+		return res[0];
+	}
 }
 
-class userNoExist {
-    serverID: Number | string;
-    userID: Number | string;
-    public type = "error";
-
-    constructor(server: Number | string, user: Number | string) {
-        this.serverID = server;
-        this.userID = user;
-    }
-}
-
-export default members;
+interface memberResponse extends RowDataPacket, Member {}
+export default Members;

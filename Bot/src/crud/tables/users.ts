@@ -1,16 +1,56 @@
-import connection  from "../connection";
+import { connection } from "../connection";
+import type { User } from "../../../../types/crud";
+import { RowDataPacket } from "mysql2";
 
-const users = new class {
+class Users extends connection {
     async putUser(userID: number | String): Promise<void> {
         try {
-            const cnt = await connection();
-            await cnt.query(`INSERT INTO users(usr_id) Values(${userID})`);
-            cnt.end();
-        } catch (e) {
-            console.log(e);
+            await this.cnt.query(`INSERT INTO users(usr_id) Values(${userID})`);
+        } catch (e: Error | any) {
+            if (!e.message.startsWith("Duplicate")) {
+                console.log(e);
+            }
         }
-        return;
+    }
+
+    public async getUser(userID: number | String): Promise<User> {
+        const [res, _] = await this.cnt.query<UserSqlRes[]>(
+            `SELECT * from users WHERE usr_id = ${userID}`
+        );
+        return res[0];
+    }
+
+    public async setTemplate(
+        userID: string | number,
+        options: template
+    ): Promise<void> {
+        if (!options) return;
+        if (Object.keys(options).length === 0) return;
+	
+        let query: String[] = [
+            options.temp_type ? "templade_type = " + options.temp_type : "",
+            options.Pcolor ? `pri_color =  '${options.Pcolor}'` : "",
+            options.Scolor ? `sec_color = '${options.Scolor}'` : "",
+        ];
+        await this.cnt.query(
+            "Update users SET " +
+                query.join(",") +
+                `, last_tmp_changed =  CURRENT_TIMESTAMP ` +
+                "WHERE usr_id = " +
+                userID
+        );
+    }
+
+    public async deleteUser(userID: string | number): Promise<void> {
+        await this.cnt.query("Delete from users WHERE usr_id = " + userID);
     }
 }
 
-export default users;
+interface template {
+    temp_type?: number;
+    Pcolor?: String;
+    Scolor?: String;
+}
+interface UserSqlRes extends RowDataPacket, User {}
+
+export { Users };
