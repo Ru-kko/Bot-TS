@@ -1,5 +1,5 @@
 import { SessionData, Store } from "express-session";
-import Database from "../../crud/tables/sessions";
+import { SessionsDataBase as Database } from "../../crud/tables/sessions";
 
 export default class SessionStorage extends Store {
 
@@ -14,7 +14,9 @@ export default class SessionStorage extends Store {
             } else {
                 callback(null, null);
             };
-        });
+		}).finally(() => {
+			DB.close();
+		});
     }
 
     set(sid: string, session: SessionData, callback?: (err?: any) => void): void {
@@ -48,7 +50,7 @@ export default class SessionStorage extends Store {
     destroy(sid: string, callback?: (err?: any) => void): void {
         const DB = new Database();
         DB.delete(sid)
-            .then(() => DB.close())
             .catch(e => callback ? callback(e) : NaN)
+			.finally(() => DB.close())
     }
 }
