@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS bot;
+SET GLOBAL event_scheduler = ON;
 
 USE bot;
 
@@ -15,6 +16,16 @@ CREATE TABLE IF NOT EXISTS servers(
     welcome_msg_config JSON DEFAULT NULL
 );
 
+-- Users List
+CREATE TABLE IF NOT EXISTS users(
+    usr_id BIGINT(18) NOT NULL PRIMARY KEY,
+    templade_type TINYINT NOT NULL DEFAULT 0,
+    pri_color VARCHAR(6) NOT NULL DEFAULT '2F3136',
+    sec_color VARCHAR(6) NOT NULL DEFAULT 'BEC1C8',
+    last_tmp_changed DATETIME NOT NULL DEFAULT NOW(),
+    spt_tk VARCHAR(338)
+);
+
 --  Warns Types
 CREATE Table IF NOT EXISTS svr_warns(
     sv_id BIGINT(18) NOT NULL PRIMARY KEY,
@@ -24,16 +35,6 @@ CREATE Table IF NOT EXISTS svr_warns(
     mute BOOLEAN DEFAULT 0,
     mute_time INT DEFAULT 0,
     CONSTRAINT sv_warn_fk FOREIGN KEY(sv_id) REFERENCES servers(sv_id)
-);
-
--- Users List
-CREATE TABLE IF NOT EXISTS users(
-    usr_id BIGINT(18) NOT NULL PRIMARY KEY,
-    templade_type TINYINT NOT NULL DEFAULT 0,
-    pri_color VARCHAR(6) NOT NULL DEFAULT '2F3136',
-    sec_color VARCHAR(6) NOT NULL DEFAULT 'BEC1C8',
-    last_tmp_changed DATETIME NOT NULL DEFAULT NOW(),
-    spt_tk VARCHAR(338)
 );
 
 -- Playlis Form Users
