@@ -46,7 +46,7 @@ export default () => {
         const content = message.content.split(" ");
 
         if (message.guild) {
-            memberManager.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5);
+            await memberManager.addXP(message.guild.id, message.author.id, Math.round(Math.random() * (10 - 5)) + 5);
         }
         if (content[0] === server.prefix) {
             const func = cmd.get(content[1]);

@@ -1,10 +1,6 @@
-import dontEnv from "dotenv";
+import Members from "./tables/membres";
 import { Servers } from "./tables/servers";
 import { Users } from "./tables/users";
-
-beforeAll(async () => {
-    dontEnv.config();
-});
 
 describe("users", () => {
     it("Should responds with an user. [Users.putUser && Users.getUser]", async () => {
@@ -41,7 +37,7 @@ describe("users", () => {
         await db.deleteUser("1");
         const none = await db.getUser("1");
         db.close();
-		expect(none).toBe(undefined);
+        expect(none).toBe(undefined);
     });
 });
 
@@ -89,14 +85,69 @@ describe("servers", async () => {
         expect(deleted).toBe(undefined);
     });
 
-	it("Should create a server when pass second prop", async () => {
-		const db = new Servers();	
-		const res = await db.getServer("2", true);
-		
-		await db.deleteServer("2")
-		db.close();
+    it("Should create a server when pass second prop", async () => {
+        const db = new Servers();
+        const res = await db.getServer("2", true);
 
-		expect(res.sv_id).toBe(2);
-		expect(res.prefix).toBe("waifu");
-	});
+        await db.deleteServer("2");
+        db.close();
+
+        expect(res.sv_id).toBe(2);
+        expect(res.prefix).toBe("waifu");
+    });
+});
+
+describe("members", () => {
+    let serversManager: Servers;
+    let usersManager: Users;
+    beforeAll(async () => {
+        serversManager = new Servers();
+        usersManager = new Users(serversManager);
+
+        await serversManager.putServer(5);
+        await usersManager.putUser(5);
+    });
+
+    it("should add a memeber in server with ID '5'", async () => {
+        const memberManager = new Members();
+        await memberManager.memberJoin(5, 5);
+        const res = await memberManager.getMember(5, 5);
+        memberManager.close();
+
+        expect(res.usr_id).toBe(5);
+        expect(res.sv_id).toBe(5);
+        expect(res.sv_t_xp).toBe(0);
+        expect(res.act_level).toBe(0);
+    });
+
+    it("should update only experience", async () => {
+        const memberManager = new Members();
+        const init = await memberManager.getMember(5, 5);
+        const xp_1 = await memberManager.addXP(5, 5, 10);
+        const res_1 = await memberManager.getMember(5, 5);
+        const xp_2 = await memberManager.addXP(5, 5, 5);
+		const res_2 = await memberManager.getMember(5, 5);
+		memberManager.close();
+
+		expect(init.sv_t_xp).toBe(0);
+		expect(xp_1).toBe(false);
+		expect(res_1.sv_t_xp).toBe(10);
+		expect(xp_2).toBe(false);
+		expect(res_2.sv_t_xp).toBe(15);
+		expect(res_2.act_level).toBe(0);
+    });
+
+	it("should delete a member when the server was delete or the user was delete", async () => {
+		const memberManager = new Members();
+		await serversManager.deleteServer(5);
+		await usersManager.deleteUser(5);
+		const res = await memberManager.getMember(5, 5);
+		memberManager.close();
+
+		expect(res).toBe(undefined);
+	})
+
+    afterAll(async () => {
+        serversManager.close();
+    });
 });

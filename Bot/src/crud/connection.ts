@@ -12,6 +12,8 @@ export class connection {
     }
     
 	private connect(): Pool {
+		if (!(process.env.Data_Base && process.env.DB_user && process.env.DB_password)) 
+			throw new Error("Not enviroment credentials variables");
         const pool = createPool({
             host: "localhost",
             database: process.env.Data_Base,
@@ -21,8 +23,8 @@ export class connection {
         return pool;
     }
 	
-	public close() {
-		this.cnt.end();	
+	public async close() {
+		await this.cnt.end();	
 	}
 }
 
