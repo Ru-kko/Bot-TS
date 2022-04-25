@@ -5,6 +5,7 @@ export default defineConfig({
         exclude: ['node_modules', 'build', '**/*.js'],
         environment: 'node',
         watch: true,
-        global: true
+        global: true,
+		globalSetup: "./src/testSetup.ts"
     }
 });

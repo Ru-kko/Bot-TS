@@ -1,4 +1,4 @@
-import express  from require("express");
+import { Express } from "express";
 
 declare global {
     namespace Express {

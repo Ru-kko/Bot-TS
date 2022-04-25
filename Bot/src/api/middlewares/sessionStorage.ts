@@ -2,40 +2,54 @@ import { SessionData, Store } from "express-session";
 import { SessionsDataBase as Database } from "../../crud/tables/sessions";
 
 export default class SessionStorage extends Store {
-
-    get(sid: string, callback: (err: any, session?: SessionData | null) => void): void {
+    get(
+        sid: string,
+        callback: (err: any, session?: SessionData | null) => void
+    ): void {
         const DB = new Database();
-        DB.has(sid).then(res => {
-            if (res) {
-                DB.get(sid)
-                    .then(data => callback(null, data))
-                    .catch(e => callback(null, e))
-                    .finally(() => DB.close());
-            } else {
-                callback(null, null);
-            };
-		}).finally(() => {
-			DB.close();
-		});
-    }
-
-    set(sid: string, session: SessionData, callback?: (err?: any) => void): void {
-        const DB = new Database();
-        if (session.code) {
-            DB.has(sid).then(res => {
+        try {
+            DB.has(sid).then((res) => {
                 if (res) {
-                    DB.touch(sid, session)
-                        .catch(e => callback ? callback(e) : NaN)
+                    DB.get(sid)
+                        .then((data) => callback(null, data))
                         .finally(() => DB.close());
                 } else {
-                    DB.set(sid, session)
-                        .catch(e => callback ? callback(e) : NaN)
-                        .finally(() => DB.close());
+                    callback(null, null);
                 }
-            })
+            });
+        } catch (e) {
+            callback(e, null);
+            DB.close();
+        }
+    }
+
+    set(
+        sid: string,
+        session: SessionData,
+        callback?: (err?: any) => void
+    ): void {
+        const DB = new Database();
+        if (session.code) {
+            try {
+                DB.has(sid).then((res) => {
+                    if (res) {
+                        DB.touch(sid, session).then(() => {
+                            callback?.();
+                            DB.close();
+                        });
+                    } else {
+                        DB.set(sid, session).then(() => {
+                            callback?.();
+                            DB.close();
+                        });
+                    }
+                });
+            } catch (e) {
+                callback?.(e);
+            }
         }
 
-        callback ? callback() : NaN;
+        callback?.();
     }
 
     touch(sid: string, session: SessionData, callback?: () => void): void {
@@ -43,14 +57,15 @@ export default class SessionStorage extends Store {
 
         DB.touch(sid, session).then(() => {
             DB.close();
-            callback ? callback() : NaN;
+            callback?.();
         });
     }
 
     destroy(sid: string, callback?: (err?: any) => void): void {
         const DB = new Database();
         DB.delete(sid)
-            .catch(e => callback ? callback(e) : NaN)
-			.finally(() => DB.close())
+            .then(() => callback?.())
+            .catch((e) => callback?.(e))
+            .finally(() => DB.close());
     }
 }
