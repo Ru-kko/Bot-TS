@@ -8,13 +8,11 @@ import Config  from '../../Config/values.config'
 import './banner.css'
 
 export default () => {
-    const embedText = useRef<HTMLParagraphElement>(null);
+    const [writter, runWritter] = useWriter('Get better your server and moderate with me, an multipurpose bot');
     const imageLogo = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
-        useWriter(
-            embedText,
-            'Get better your server and moderate with me, an multipurpose bot');
+        runWritter();
         setTimeout(() => {
             imageLogo.current!.className += ' banner-zoom-btn'
         }, 750);
@@ -24,7 +22,7 @@ export default () => {
             <div className='Banner'>
                 <Embed title='Test bot' footer={true} color='cyan'>
                     <div className='banner-embed-conent'>
-                        <p ref={embedText}></p>
+                        <p> { writter } </p>
                     </div>
                 </Embed>
                 <div className='banner-big-logo'>
@@ -33,9 +31,9 @@ export default () => {
                         <a href={Config.Discord.Invite} className='banner-button-white'>
                             Add to discord
                         </a>
-                        <Link to={Config.Links.loginPath} className='banner-button-blue'>
+                        <a href={Config.Discord.Auth} className='banner-button-blue'>
                             Login
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </div>
