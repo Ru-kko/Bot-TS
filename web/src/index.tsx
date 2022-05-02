@@ -1,19 +1,15 @@
-import ReactDOM from 'react-dom';
-import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
-import Test from './pages/Home';
-import Background from './components/BackGround/BackGround';
-import Footer from './components/Footer/Footer'
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
+import { App } from "./app";
+import { store } from "./context/store";
 
-import './app.css';
-
-ReactDOM.render(
-    <Router >
-        <Background>
-            <Routes>
-                <Route path="/" element={<Test />} />
-            </Routes>
-        </Background>
-        <Footer />
-    </Router >,
-    document.getElementById("app")
+ReactDOM.createRoot(document.getElementById("app")!).render(
+    // <React.StrictMode>
+    <Router>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </Router>
+    // </React.StrictMode>
 );
