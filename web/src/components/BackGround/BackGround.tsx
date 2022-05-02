@@ -1,9 +1,8 @@
-import { Component } from 'react'
-import Navigation from '../navigation/Navigation'
+import { Component, ReactNode } from 'react'
 import { Wave } from '../Svgs'
 import './style.css'
 
-export default class background extends Component {
+export default class background extends Component<{children:ReactNode}> {
     render() {
         return (
             <>
