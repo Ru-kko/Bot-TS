@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AxiosError } from "axios";
 import { getAccessToken, identifyUser } from "../services/DiscordOauth";
+import { SessionsDataBase } from "../../crud/tables/sessions";
 
 export async function registre(req: Request, res: Response) {
     const code = <string | undefined>req.query.code;
@@ -53,7 +54,10 @@ export async function registre(req: Request, res: Response) {
 export function logOut(req: Request, res: Response) {
     if (!req.session) {
         res.status(404);
-        res.send({error: 'Not loged', message: 'you must login before doing this'})
+        res.send({
+            error: "Not loged",
+            message: "you must login before doing this",
+        });
     }
     req.session.destroy((e: Error) => {
         if (e) {
@@ -63,4 +67,32 @@ export function logOut(req: Request, res: Response) {
             res.status(205).send();
         }
     });
+}
+
+export async function logged(req: Request, res: Response) {
+    const seessionManager = new SessionsDataBase();
+    try {
+        if (await seessionManager.has(req.sid || "")) {
+            res.status(200);
+            res.send({
+                status: true,
+                message:
+                    "Discord user with id " + req.session.userid + "is logged",
+            });
+        }else {
+            res.status(200);
+            res.send({
+                status: false,
+                message:
+                    "There in not loged",
+            });
+        }
+    } catch (e: Error | any) {
+        res.status(500);
+        res.send({
+            error: e.name,
+            message: e.message
+        });
+    }
+    seessionManager.close();
 }

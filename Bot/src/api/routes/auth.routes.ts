@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { logOut, registre } from "../controllers/sessions";
+import { logged, logOut, registre } from "../controllers/sessions";
 
 const authRouter = Router();
 
-authRouter.post('/dc/registre', registre);
-authRouter.delete('/dc/logout', logOut);
+authRouter.post('/discord', registre);
+authRouter.delete('/discord', logOut);
+authRouter.get('/discord', logged);
 
 export default authRouter;
