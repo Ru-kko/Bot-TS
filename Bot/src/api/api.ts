@@ -21,13 +21,14 @@ class server {
             try {
                 this.server.set("trust proxy", 1);
                 this.app = this.server.listen(this.port, () => {
-                    if (!this.test) console.log("Server running on port " + this.port);
+                    if (!this.test)
+                        console.log("Server running on port " + this.port);
                     resolve(this);
                 });
-            }catch(e) {
-                reject(new Error('Server not initialized'));
+            } catch (e) {
+                reject(new Error("Server not initialized"));
             }
-        })
+        });
     }
 
     middlewares(): server {
@@ -50,7 +51,7 @@ class server {
             })
         );
         this.server.use(getCookieSid);
-        this.server.use(cors());
+        this.server.use(cors({ credentials: true, origin: process.env.client_uri }));
 
         return this;
     }
