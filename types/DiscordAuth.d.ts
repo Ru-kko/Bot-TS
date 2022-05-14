@@ -1,9 +1,16 @@
-export interface user {
+export interface userBase {
     id: string;
     username: string;
     avatar: string;
-    descriminator: string;
+    discriminator: string;
     public_flags: string;
+}
+
+export interface user extends userBase {
+    flags: number;
+    avatar: string;
+    banner_color: string;
+    locate: string;
 }
 
 export interface identify_request {
@@ -22,13 +29,13 @@ export interface identify_request {
         }
     }
     expires: string;
-    user: user;
+    user: userBase;
 }
 
 export interface tokenData {
     access_token: string;
     expires_in: number;
     refresh_token: string;
-    scope: String;
+    scope?: String;
     token_type: String;
 }

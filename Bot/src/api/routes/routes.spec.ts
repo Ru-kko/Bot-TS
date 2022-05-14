@@ -1,15 +1,16 @@
 import request from "supertest";
 import { SessionsDataBase } from "../../crud/tables/sessions";
-import { TestServer, testUrl } from "../../testSetup";
+import { testUrl } from "../../testSetup";
+
 
 beforeAll(async () => {
     process.env = {
         ...process.env,
-        testDCcode: "CEQqO4HT0EEsxTg27Bn41MuCn9iaBJ",
+        testDCcode: "yZtl06ifpETJgOcBOBl3zAoCheesl7",
     };
 });
 
-describe("/server", () => {
+describe("discord", () => {
     let sessionManager: SessionsDataBase;
     let cookie: string, sid: string;
 
@@ -26,10 +27,10 @@ describe("/server", () => {
 
         setTimeout(async () => {
             const data = await sessionManager.has(sid);
-    
+
             expect(res.status).toEqual(200);
             expect(data).toBe(true);
-        }, 200)
+        }, 200);
     });
 
     it("should respond with an object with status true because the user making the query is logged", async () => {
@@ -41,9 +42,23 @@ describe("/server", () => {
         expect(res.body.status).toBe(true);
     });
 
+    describe("/user", () => {   
+        it("Should responds with an error because there are not credentials", async () => {
+            const res = await request(testUrl).get("/user");
+            expect(res.status).toBe(403);
+        });
+
+        it("Should responds with user data", async () => {
+            const res = await request(testUrl).get("/user").set("Cookie", [ cookie ]);
+    
+            expect(res.status).toBe(200);
+            expect(res.body.id !== undefined).toBe(true);
+        });
+    });
+
     it("shuld delete a saved session", async () => {
         const res = await request(testUrl)
-            .delete("/auth/dc/logout")
+            .delete("/auth/discord")
             .set("Cookie", [cookie]);
         const has = await sessionManager.has("sid");
 
@@ -60,3 +75,4 @@ describe("/server", () => {
 
     afterAll(async () => await sessionManager.close());
 });
+

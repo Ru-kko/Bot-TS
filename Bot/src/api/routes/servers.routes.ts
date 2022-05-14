@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { servers, serverColum } from '../../crud/tables/servers'
+import { getAll } from "../controllers/server";
 
 const serverRouter = Router();
 
+serverRouter.post('/', getAll)
 export default serverRouter;

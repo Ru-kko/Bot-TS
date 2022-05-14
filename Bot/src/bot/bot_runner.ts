@@ -16,6 +16,7 @@ const client = new discordjs.Client({
 
 export default () => {
     client.on('ready', () => {
+        client.user?.setStatus('invisible');
         console.log(`Bot ready`);
     });
     client.on('guildCreate', async guild => {

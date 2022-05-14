@@ -7,6 +7,8 @@ import servers from "./routes/servers.routes";
 import authRouter from "./routes/auth.routes";
 import SessionStorage from "./middlewares/sessionStorage";
 import getCookieSid from "./middlewares/CookieSid";
+import tokenRefresh from "./middlewares/TokenRefresh";
+import userRouter from "./routes/user.routes";
 
 class server {
     public server: Application;
@@ -57,8 +59,9 @@ class server {
     }
 
     routes(): server {
-        this.server.use("/server", servers);
         this.server.use("/auth", authRouter);
+        this.server.use("/server", servers);
+        this.server.use("/user", tokenRefresh, userRouter);
         return this;
     }
 }
