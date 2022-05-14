@@ -22,10 +22,10 @@ export async function logOut() {
         })
 };
 
-export function isLoged(dispatch: Dispatch<AnyAction>) {
+export async function isLoged(dispatch: Dispatch<AnyAction>) {
     const sessionState = bindActionCreators(actions, dispatch);
 
-    axios
+    await axios
         .get<{ status: boolean; message: string }>(
             Config.Server.url + Config.Server.endPoits.logIn,
             { withCredentials: true }
