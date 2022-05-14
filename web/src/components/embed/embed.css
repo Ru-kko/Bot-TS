@@ -6,26 +6,23 @@
     flex-direction: row;
     overflow: hidden;
 }
-.embed-line{
-    width: 1vh;
-}
 .embed-content{
+    border-left: solid 4px;
     display: flex;
     flex-direction: column;
-    padding: 1vh 2vh ;
+    padding: 1vh 3vh 2vh;
+    width: 100%;
 }
 .embed-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     font-size: large;
+    margin-bottom: 2vh;
 }
 .embed img {
     height: 2em;
     width: 2em;
     margin-right: 2vh;
     border-radius: 50%;
-}
-.embed-content {
-    padding: 1vh 2vh;
 }

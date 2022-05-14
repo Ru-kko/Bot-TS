@@ -28,15 +28,12 @@ export default (props: PropsWithChildren<options>) => {
     }
     return (
         <div className='embed'>
-            <div className="embed-line" style={{ backgroundColor: props.color ?? "#57F288" }} />
-            <div className="embed-content">
+            <div className="embed-content" style={{borderColor: props.color ?? '#57F288' }}>
                 <div className="embed-header" style={{marginTop: '10px'}}>
                     <img src={props.image ?? Avatar} />
                     <h4 style={{margin: '0px'}}>{props.title}</h4>
                 </div>
-                <div className="embed-content">
-                    {props.children}
-                </div>
+                {props.children}
                 {footer()}
             </div>
         </div>
