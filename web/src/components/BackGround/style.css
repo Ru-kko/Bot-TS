@@ -1,12 +1,15 @@
 .content{
     background-color: #32353B;
     display: flex;
+    overflow: hidden;
     flex-direction: column;
     min-height: 200px;
 }
+
 .backGrund{
     color: #FFF;
     display: flex;
+    transform-origin: 0 0;
     flex-direction: column;
 }
 

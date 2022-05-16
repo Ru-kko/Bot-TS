@@ -1,54 +1,38 @@
 import { Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { bindActionCreators } from "redux";
 import { useDispatch } from "react-redux";
-
-import Home from "./pages/Home";
-import Background from "./components/BackGround/BackGround";
-import Footer from "./components/Footer/Footer";
-import Navigation from "./components/navigation/Navigation";
+import { loadingActions } from "./context/reducers/loading";
+import { isLoged } from "./services/discord.auth";
+import { Background } from "./components/BackGround/BackGround";
 import { DiscordLogIn } from "./pages/Auth";
 import { Commads } from "./pages/Commads";
-
-import { isLoged } from "./services/discord.auth";
 import { Dashboard } from "./pages/DashBoard";
-import Loading from "./components/Loading/Loading";
+import Footer from "./components/Footer/Footer";
+import Navigation from "./components/navigation/Navigation";
+import Home from "./pages/Home";
+
 import "./app.css";
 
 export function App() {
-    const [loaded, setLoad] = useState(false);
     const dispatch = useDispatch();
+    const { loading, loaded } = bindActionCreators(loadingActions, dispatch);
 
     useEffect(() => {
-        isLoged(dispatch).finally(() => setLoad(true));
+        loading();
+        isLoged(dispatch).finally(() => loaded());
     }, []);
 
     return (
         <>
             <Navigation />
             <Background>
-                {loaded ? (
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route
-                            path="/auth/discord"
-                            element={<DiscordLogIn />}
-                        />
-                        <Route path="/cmd" element={<Commads />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                    </Routes>
-                ) : (
-                    <div
-                        style={{
-                            height: "30vh",
-                            fontSize: "20vh",
-                            color: "#62656B",
-                            textAlign: "center",
-                            padding: "10% 0",
-                        }}
-                    >
-                        <Loading />
-                    </div>
-                )}
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/auth/discord" element={<DiscordLogIn />} />
+                    <Route path="/cmd" element={<Commads />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                </Routes>
             </Background>
             <Footer />
         </>

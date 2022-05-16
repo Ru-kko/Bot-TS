@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { bindActionCreators } from "redux";
-import Loading from "../components/Loading/Loading";
+import { loadingActions } from "../context/reducers/loading";
 import { actions } from "../context/reducers/logState";
 import { logIn } from "../services/discord.auth";
 
@@ -12,28 +12,23 @@ export function DiscordLogIn() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        const { loading, loaded } = bindActionCreators(
+            loadingActions,
+            dispatch
+        );
         const sessionState = bindActionCreators(actions, dispatch);
 
-        logIn(search).then(() => {
-            sessionState.logIn();
-            navigator("/dashboard");
-        }).catch(() => {
-            sessionState.logOut();
-            navigator("/");
-        });
+        loading();
+        logIn(search)
+            .then(() => {
+                sessionState.logIn();
+                navigator("/dashboard");
+            })
+            .catch(() => {
+                sessionState.logOut();
+                navigator("/");
+            }).finally(() => loaded);
     }, []);
 
-    return (
-        <div
-            style={{
-                height: "30vh",
-                fontSize: "20vh",
-                color: "#62656B",
-                textAlign: "center",
-                padding: "10% 0",
-            }}
-        >
-            <Loading />
-        </div>
-    );
+    return <></>;
 }
