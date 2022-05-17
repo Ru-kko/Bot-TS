@@ -14,8 +14,9 @@ class Members extends connection {
                     `(${UserID}, ${ServerID})`
             );
         } catch (e: QueryError | any) {
-            switch (e.errno){
-                case 1026: break;
+            switch (e.errno) {
+                case 1026:
+                    break;
                 case 1452:
                     const userManager = new Users();
                     await userManager.putUser(UserID);
@@ -23,7 +24,6 @@ class Members extends connection {
                 default:
                     console.log(e);
             }
-
         }
     }
 
@@ -63,15 +63,38 @@ class Members extends connection {
         }
     }
 
-	public async getMember(UserID: number | string, ServerID: number | string, create?: boolean): Promise<Member>{
-		const [res, _] = await	this.cnt.query<memberResponse[]>(`SELECT * from usrs_srvs WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`);
+    public async getMember(
+        UserID: number | string,
+        ServerID: number | string,
+        create?: boolean
+    ): Promise<Member> {
+        const [res, _] = await this.cnt.query<memberResponse[]>(
+            `SELECT * from usrs_srvs WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`
+        );
 
-		if (!res[0] && create){
-			await this.memberJoin(UserID, ServerID);
-			return await this.getMember(UserID, ServerID);
-		}
-		return res[0];
-	}
+        if (!res[0] && create) {
+            await this.memberJoin(UserID, ServerID);
+            return await this.getMember(UserID, ServerID);
+        }
+        return res[0];
+    }
+
+    public async userIsIn(
+        userID: number | string,
+        servers: number[] | string[]
+    ): Promise<{ sv_id: number }[]> {
+        if (servers.length <= 0) return Promise.resolve([]);
+
+        const serversIds = servers.join(" or sv_id = ");
+        const query =
+            `SELECT sv_id FROM usrs_srvs WHERE usr_id = ${userID} AND` +
+            `(sv_id = ${serversIds})`;
+        const [res, _] = await this.cnt.query<
+            { sv_id: number }[] & RowDataPacket[]
+        >(query);
+
+        return res;
+    }
 }
 
 interface memberResponse extends RowDataPacket, Member {}

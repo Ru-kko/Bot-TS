@@ -105,6 +105,8 @@ describe("members", () => {
         usersManager = new Users(serversManager);
 
         await serversManager.putServer(5);
+        await serversManager.putServer(6);
+        await serversManager.putServer(7);
         await usersManager.putUser(5);
     });
 
@@ -126,26 +128,56 @@ describe("members", () => {
         const xp_1 = await memberManager.addXP(5, 5, 10);
         const res_1 = await memberManager.getMember(5, 5);
         const xp_2 = await memberManager.addXP(5, 5, 5);
-		const res_2 = await memberManager.getMember(5, 5);
-		memberManager.close();
+        const res_2 = await memberManager.getMember(5, 5);
+        memberManager.close();
 
-		expect(init.sv_t_xp).toBe(0);
-		expect(xp_1).toBe(false);
-		expect(res_1.sv_t_xp).toBe(10);
-		expect(xp_2).toBe(false);
-		expect(res_2.sv_t_xp).toBe(15);
-		expect(res_2.act_level).toBe(0);
+        expect(init.sv_t_xp).toBe(0);
+        expect(xp_1).toBe(false);
+        expect(res_1.sv_t_xp).toBe(10);
+        expect(xp_2).toBe(false);
+        expect(res_2.sv_t_xp).toBe(15);
+        expect(res_2.act_level).toBe(0);
     });
 
-	it("should delete a member when the server was delete or the user was delete", async () => {
-		const memberManager = new Members();
-		await serversManager.deleteServer(5);
-		await usersManager.deleteUser(5);
-		const res = await memberManager.getMember(5, 5);
-		memberManager.close();
+    it("should respionds whit an array containing three server ids", async () => {
+        const memberManager = new Members();
+        await memberManager.memberJoin(5, 6);
+        await memberManager.memberJoin(5, 7);
+        const res = await memberManager.userIsIn(5, [5, 6, 7, 8]);
+        memberManager.close();
+        
+        expect(res).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                sv_id: 5
+            })
+        ]));
+        expect(res).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                sv_id: 6
+            })
+        ]));
+        expect(res).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                sv_id: 7
+            })
+        ]));
+        expect(res).not.toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                sv_id: 8
+            })
+        ]));
+    });
+    it("should delete a member when the server was delete or the user was delete", async () => {
+        const memberManager = new Members();
+        await serversManager.deleteServer(5);
+        await serversManager.deleteServer(6);
+        await serversManager.deleteServer(7);
+        await usersManager.deleteUser(5);
+        const res = await memberManager.getMember(5, 5);
+        memberManager.close();
 
-		expect(res).toBe(undefined);
-	})
+        expect(res).toBe(undefined);
+    });
 
     afterAll(async () => {
         serversManager.close();
