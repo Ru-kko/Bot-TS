@@ -3,9 +3,9 @@ import type { User } from "../../../../types/crud";
 import { RowDataPacket } from "mysql2";
 
 class Users extends connection {
-    async putUser(userID: number | String): Promise<void> {
+    async putUser(userID: String): Promise<void> {
         try {
-            await this.cnt.query(`INSERT INTO users(usr_id) Values(${userID})`);
+            await this.cnt.query(`INSERT INTO users(usr_id) Values("${userID}")`);
         } catch (e: Error | any) {
             if (!e.message.startsWith("Duplicate")) {
                 console.log(e);
@@ -13,15 +13,15 @@ class Users extends connection {
         }
     }
 
-    public async getUser(userID: number | String): Promise<User> {
+    public async getUser(userID: String): Promise<User> {
         const [res, _] = await this.cnt.query<UserSqlRes[]>(
-            `SELECT * from users WHERE usr_id = ${userID}`
+            `SELECT * from users WHERE usr_id = "${userID}"`
         );
         return res[0];
     }
 
     public async setTemplate(
-        userID: string | number,
+        userID: string,
         options: template
     ): Promise<void> {
         if (!options) return;
@@ -36,13 +36,12 @@ class Users extends connection {
             "Update users SET " +
                 query.join(",") +
                 `, last_tmp_changed =  CURRENT_TIMESTAMP ` +
-                "WHERE usr_id = " +
-                userID
+                `WHERE usr_id = "${userID}"`
         );
     }
 
-    public async deleteUser(userID: string | number): Promise<void> {
-        await this.cnt.query("Delete from users WHERE usr_id = " + userID);
+    public async deleteUser(userID: string): Promise<void> {
+        await this.cnt.query(`Delete from users WHERE usr_id = "${userID}"`);
     }
 }
 

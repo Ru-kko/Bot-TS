@@ -5,7 +5,7 @@ USE bot;
 
 -- Lista Srevidores
 CREATE TABLE IF NOT EXISTS servers(
-	sv_id BIGINT(18)  NOT NULL PRIMARY KEY,
+	sv_id VARCHAR(20)  NOT NULL PRIMARY KEY,
     prefix VARCHAR(5) NOT NULL DEFAULT 'waifu',
     notify_warn INT NOT NULL DEFAULT 10,
     muted_rol BIGINT(18) DEFAULT 0,    
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS servers(
 
 -- Users List
 CREATE TABLE IF NOT EXISTS users(
-    usr_id BIGINT(18) NOT NULL PRIMARY KEY,
+    usr_id VARCHAR(20) NOT NULL PRIMARY KEY,
     templade_type TINYINT NOT NULL DEFAULT 0,
     pri_color VARCHAR(6) NOT NULL DEFAULT '2F3136',
     sec_color VARCHAR(6) NOT NULL DEFAULT 'BEC1C8',
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS users(
 
 --  Warns Types
 CREATE Table IF NOT EXISTS svr_warns(
-    sv_id BIGINT(18) NOT NULL PRIMARY KEY,
+    sv_id VARCHAR(20) NOT NULL PRIMARY KEY,
     warn_desc VARCHAR(40) NOT NULL,
     val INT NOT NULL DEFAULT 0,
     kick BOOLEAN DEFAULT 0,
@@ -39,15 +39,15 @@ CREATE Table IF NOT EXISTS svr_warns(
 
 -- Playlis Form Users
 CREATE Table IF NOT EXISTS users_pl(
-    usr_id BIGINT(18) NOT NULL PRIMARY KEY,
+    usr_id VARCHAR(20) NOT NULL PRIMARY KEY,
     pl_id VARCHAR(22) NOT NULL,
     CONSTRAINT usr_pl_fk FOREIGN KEY(usr_id) REFERENCES users(usr_id) ON DELETE CASCADE
 );
 
 -- Users And Servers Conection
 CREATE TABLE IF NOT EXISTS usrs_srvs(
-    usr_id BIGINT(18) NOT NULL,
-    sv_id BIGINT(18)  NOT NULL,
+    usr_id VARCHAR(20) NOT NULL,
+    sv_id VARCHAR(20)  NOT NULL,
     PRIMARY KEY(usr_id, sv_id),
     sv_t_xp INT NOT NULL DEFAULT 0,
     act_level INT NOT NULL DEFAULT 0,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS sessions_storage(
 	refreshToken VARCHAR(30) NOT NULL,
 	token VARCHAR(40) NOT NULL,
 	tokenType VARCHAR(40) NOT NULL,
-    userid BIGINT(18) NOT NULL,
+    userid VARCHAR(20) NOT NULL,
 	originalMaxAge BIGINT(20) NOT NULL,
 	tokenExpires BIGINT(30) NOT NULL,
 	tokenCreated TIMESTAMP NOT NULL,

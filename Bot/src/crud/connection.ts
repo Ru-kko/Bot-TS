@@ -19,6 +19,7 @@ export class connection {
             database: process.env.Data_Base,
             user: process.env.DB_user,
             password: process.env.DB_password,
+            decimalNumbers: false
         });
         return pool;
     }

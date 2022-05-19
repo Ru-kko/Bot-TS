@@ -3,9 +3,9 @@ import { connection } from "../connection";
 import { Server } from "../../../../types/crud";
 
 class Servers extends connection {
-    public async getServer(ServerID: string | number, create?: boolean ): Promise<ServerResponse> {
+    public async getServer(ServerID: string, create?: boolean ): Promise<ServerResponse> {
         const getter = async () =>  await this.cnt.query<ServerResponse[]>(
-            `SELECT * from servers WHERE sv_id = ${ServerID}`
+            `SELECT * from servers WHERE sv_id = "${ServerID}"`
         );
  
 		const [res, _] = await getter();
@@ -18,10 +18,10 @@ class Servers extends connection {
         return res[0];
     }
 
-    public async putServer(ServerID: string | number): Promise<void> {
+    public async putServer(ServerID: string): Promise<void> {
         try {
             await this.cnt.query(
-                `INSERT INTO servers(sv_id) Values (${ServerID})`
+                `INSERT INTO servers(sv_id) Values ("${ServerID}")`
             );
         } catch (e: Error | any) {
             if (!e.message.startsWith("Duplicate")) console.log(e);
@@ -30,7 +30,7 @@ class Servers extends connection {
 
     public async setColunm(
         Colunm: colunm,
-        ServerID: string | number
+        ServerID: string
     ): Promise<void> {
         let query: string;
 
@@ -39,19 +39,19 @@ class Servers extends connection {
         else query = `${Colunm[0]} = "${Colunm[1]}"`;
 
         await this.cnt.query(
-            `Update servers SET ${query} WHERE sv_id = ${ServerID}`
+            `Update servers SET ${query} WHERE sv_id = "${ServerID}"`
         );
     }
 
     public async cosfigWelcomeMessage(
-        ServerID: number | string,
+        ServerID: string,
         Config: Object
     ) {
         // TODO Make them
     }
 
-	public async deleteServer(ServerID: number | String): Promise<void> {
-		await this.cnt.query(`Delete from servers WHERE sv_id = ${ServerID}`);
+	public async deleteServer(ServerID: String): Promise<void> {
+		await this.cnt.query(`Delete from servers WHERE sv_id = "${ServerID}"`);
 	}
 }
 

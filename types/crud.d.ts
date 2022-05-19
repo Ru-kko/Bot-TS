@@ -1,5 +1,5 @@
 export interface User {
-	usr_id: number;
+	usr_id: string;
 	templade_type?: number;
 	pri_color: string;
 	sec_color: string;
@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface Server {
-	sv_id: number;
+	sv_id: string;
 	prefix: string; 
 	notify_warn: number;
 	muted_rol: number;
@@ -20,8 +20,8 @@ export interface Server {
 }
 
 export interface Member {
-	usr_id?: number;
-	sv_id?: number;
+	usr_id?: string;
+	sv_id?: string;
 	/* `Total experience` */
 	sv_t_xp?: number;
 	/* `Actual level` */
@@ -41,5 +41,5 @@ export interface session {
 	tokenExpires: number;
 	tokenCreated: string;
 	created?: string;
-	userid?: number;
+	userid?: string;
 }

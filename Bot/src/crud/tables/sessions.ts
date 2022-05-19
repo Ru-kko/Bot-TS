@@ -19,13 +19,14 @@ class SessionsDataBase extends connection {
         );
         const info = data[0];
         if (!info) return;
+       
         var response: SessionData = {
             cookie: {
                 originalMaxAge: info.originalMaxAge!,
                 expires: new Date(info.deleteDate),
             },
             code: info.code,
-            userid: String(info.userid),
+            userid: info.userid! + "",
             token: {
                 type: info.tokenType!,
                 refresh: info.refreshToken,
@@ -46,7 +47,7 @@ class SessionsDataBase extends connection {
             `'${sid}', '${session.code}', ${session.cookie.originalMaxAge} , '${session.token.refresh}', ` +
             `'${new Date(session.cookie.expires!).toISOString().slice(0,-5)}', ` +
             `'${session.token.token}', '${session.token.type}', ` +
-            `'${session.token.create}', ${session.token.expires}, ${session.userid})`;
+            `'${session.token.create}', ${session.token.expires}, "${session.userid}")`;
 
         await this.cnt.query(query).catch(async e => {
             switch (e.errno) {

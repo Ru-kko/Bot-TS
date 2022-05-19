@@ -5,15 +5,15 @@ import { Users } from "./users";
 
 class Members extends connection {
     public async memberJoin(
-        UserID: number | string,
-        ServerID: number | string
+        UserID: string,
+        ServerID: string
     ): Promise<void> {
         try {
             await this.cnt.query(
                 "INSERT INTO usrs_srvs(usr_id, sv_id) VALUES" +
-                    `(${UserID}, ${ServerID})`
+                    `("${UserID}", "${ServerID}")`
             );
-        } catch (e: QueryError | any) {
+        } catch (e: QueryError | any) {        
             switch (e.errno) {
                 case 1026:
                     break;
@@ -28,11 +28,16 @@ class Members extends connection {
     }
 
     public async addXP(
-        UserID: number | string,
-        ServerID: string | number,
+        UserID: string,
+        ServerID: string,
         XP: number
     ): Promise<boolean> {
-        const condition = `WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`;
+        const res = await this.getMember(UserID, ServerID)
+        if(!res) {
+            await this.memberJoin(UserID, ServerID);
+        }
+        
+        const condition = `WHERE usr_id = ${UserID} AND sv_id = "${ServerID}"`;
         const member = await this.cnt
             .query<memberResponse[]>(
                 `SELECT sv_t_xp, act_level FROM usrs_srvs ` + condition
@@ -64,12 +69,12 @@ class Members extends connection {
     }
 
     public async getMember(
-        UserID: number | string,
-        ServerID: number | string,
+        UserID: string,
+        ServerID: string,
         create?: boolean
     ): Promise<Member> {
         const [res, _] = await this.cnt.query<memberResponse[]>(
-            `SELECT * from usrs_srvs WHERE usr_id = ${UserID} AND sv_id = ${ServerID}`
+            `SELECT * from usrs_srvs WHERE usr_id = "${UserID}" AND sv_id = "${ServerID}"`
         );
 
         if (!res[0] && create) {
@@ -79,16 +84,11 @@ class Members extends connection {
         return res[0];
     }
 
-    public async userIsIn(
-        userID: number | string,
-        servers: number[] | string[]
+    public async getServersFromMember(
+        userID: string,
     ): Promise<{ sv_id: number }[]> {
-        if (servers.length <= 0) return Promise.resolve([]);
-
-        const serversIds = servers.join(" or sv_id = ");
         const query =
-            `SELECT sv_id FROM usrs_srvs WHERE usr_id = ${userID} AND` +
-            `(sv_id = ${serversIds})`;
+            `SELECT sv_id FROM usrs_srvs WHERE usr_id = "${userID}"`
         const [res, _] = await this.cnt.query<
             { sv_id: number }[] & RowDataPacket[]
         >(query);
