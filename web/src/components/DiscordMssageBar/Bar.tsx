@@ -1,10 +1,5 @@
-import {
-    useEffect,
-    useState,
-    useRef,
-    HTMLAttributes,
-    CSSProperties,
-} from "react";
+import { useEffect, useState, useRef, CSSProperties } from "react";
+import useViewCheck from "../../hooks/useViewCheck";
 import useWritter from "../../hooks/useWriter";
 import Embed from "../embed/Embed";
 import { Add, Arrow, Config, Invite, Plus, Tag } from "../Svgs";
@@ -47,19 +42,10 @@ export default () => {
             });
         }
     );
-    const [canSee, checking] = useState(false);
-
-    let observer = new IntersectionObserver(([entry]) => {
-        checking(entry.isIntersecting);
-        if (entry.isIntersecting) observer.disconnect();
-    });
+    const canSee = useViewCheck(_this, true);
 
     useEffect(() => {
-        observer.observe(_this.current!);
-    }, []);
-
-    useEffect(() => {
-        if (canSee) {
+        if (canSee) {     
             setTimeout(async () => {
                 _this.current!.innerText = "";
                 _this.current!.style.color = "white";
@@ -67,6 +53,7 @@ export default () => {
             }, 500);
         }
     }, [canSee]);
+
     return (
         <div className="message-bar-container">
             <div className="channels" style={channelStyle}>
@@ -93,7 +80,7 @@ export default () => {
             <div className="messages-container">
                 <div style={embedStyle}>
                     <Embed title={"test"} footer={true}>
-                        <p>
+                        <p style={{paddingBottom:  "30px"}}>
                             <span className="message-ping">@ John-Doe</span>{" "}
                             started the moderation settigs
                         </p>

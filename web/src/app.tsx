@@ -32,6 +32,8 @@ export function App() {
                     <Route path="/auth/discord" element={<DiscordLogIn />} />
                     <Route path="/cmd" element={<Commads />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard/:serverid" element={<></>} />
+                    <Route path="/leader/:leader" element={<></>} />
                 </Routes>
             </Background>
             <Footer />
