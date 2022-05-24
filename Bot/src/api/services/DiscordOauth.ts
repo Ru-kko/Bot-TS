@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
-import type { user } from "../../../../types/DiscordAuth";
+import type { guild, user } from "../../../../types/DiscordAuth";
 import type { tokenData, identify_request } from "../../../../types/DiscordAuth";
 
 export async function getAccessToken(code: string) {
@@ -64,6 +64,10 @@ export async function getAllUserInfo(token: tokenData) {
     });
 }
 
-export async function getServers() {
-
+export async function getServers(token: string) {
+    return await axios.get<guild[]>(process.env.discord_api_endpoint + "/users/@me/guilds", {
+        headers: {
+            Authorization: `Bearer ${token}` 
+        }
+    })
 }

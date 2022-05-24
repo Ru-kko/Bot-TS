@@ -60,7 +60,7 @@ class server {
 
     routes(): server {
         this.server.use("/auth", authRouter);
-        this.server.use("/server", servers);
+        this.server.use("/servers", tokenRefresh , servers);
         this.server.use("/user", tokenRefresh, userRouter);
         return this;
     }

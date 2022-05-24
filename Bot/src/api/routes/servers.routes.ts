@@ -3,5 +3,5 @@ import { getAll } from "../controllers/server";
 
 const serverRouter = Router();
 
-serverRouter.post('/', getAll)
+serverRouter.get('/', getAll)
 export default serverRouter;
