@@ -1,4 +1,4 @@
-# Divord Bot (Uncompleted)
+# Discord Bot (Uncompleted)
 This is a discord bot with a dashboard using stack 
 - Express
 - Mysql
