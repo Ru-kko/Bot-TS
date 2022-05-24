@@ -12,7 +12,6 @@ export interface user extends userBase {
     banner_color: string;
     locate: string;
 }
-
 export interface identify_request {
     application: {
         id: string;
@@ -31,6 +30,16 @@ export interface identify_request {
     expires: string;
     user: userBase;
 }
+
+export interface guild {
+    id: string;
+    name: string;
+    icon?: string;
+    owner: boolean;
+    permissions: number;
+    permissions_new: number;
+    features: string[];
+} 
 
 export interface tokenData {
     access_token: string;
