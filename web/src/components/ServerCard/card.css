@@ -15,10 +15,14 @@
     position: relative;
     padding: 10px 15px;
     width: 100%;
+    overflow: hidden;
 }
-.server-card-inf > h3 {
-    font-size: 2em;
+.server-card-name {
+    font-size: 1.7em;
     font-weight: 800;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .server-card-inf > span {
     font-size: 0.7em;
@@ -36,7 +40,7 @@
     bottom: 15px;
 }
 
-.server-card-buttoms > button {
+.server-card-buttoms > button , .server-card-buttoms > a{
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
@@ -56,13 +60,13 @@
     color: #5865f2;
 }
 
-.server-card-buttoms > button:hover {
+.server-card-buttoms > button:hover , .server-card-buttoms > a:hover {
     transform: translateY(-2px);
-    background-color: #7983F5;
-    border-color: #7983F5;
+    background-color: #7983f5;
+    border-color: #7983f5;
 }
 
 .server-card-buttoms > .transparent:hover {
     background-color: transparent;
-    color: #7983F5;
+    color: #7983f5;
 }

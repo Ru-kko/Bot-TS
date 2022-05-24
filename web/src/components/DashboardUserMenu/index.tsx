@@ -22,7 +22,7 @@ export function DashBoardUserMenu() {
             <div className="userm-profile-image-cont">
                 {data ? (
                     <>
-                        <img src={`${config.Discord.Cdn}/${data.id}/${data.avatar}?size=480`} className="userm-avatar" />
+                        <img src={`${config.Discord.Cdn}avatars/${data.id}/${data.avatar}?size=480`} className="userm-avatar" />
                         <h1>
                             {data.username}<span>#{data.discriminator}</span>
                         </h1>
