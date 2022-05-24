@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "./context/reducers/loading";
 import { isLoged } from "./services/discord.auth";
+import { PrivateRoute } from "./components/Routes/PrivateRoute";
 import { Background } from "./components/BackGround/BackGround";
 import { DiscordLogIn } from "./pages/Auth";
 import { Commads } from "./pages/Commads";
@@ -31,8 +32,14 @@ export function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/auth/discord" element={<DiscordLogIn />} />
                     <Route path="/cmd" element={<Commads />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/dashboard/:serverid" element={<></>} />
+                    <Route
+                        path="/dashboard"
+                        element={<PrivateRoute Component={<Dashboard />} />}
+                    />
+                    <Route
+                        path="/dashboard/:serverid"
+                        element={<PrivateRoute Component={<></>} />}
+                    />
                     <Route path="/leader/:leader" element={<></>} />
                 </Routes>
             </Background>
