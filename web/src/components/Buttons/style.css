@@ -1,0 +1,25 @@
+.switch-btn {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+.switch-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: 100vh;
+    position: relative;
+    transition: background-color 0.2s;
+}
+.switch-cont > span {
+    background-color: #fff;
+    color: #b9bbbe;
+    font-weight: 900;
+    text-align: center;
+    position: absolute;
+    border-radius: 100vh;
+    line-height: 120%;
+    transition: transform cubic-bezier(0.27, -0.51, 0.67, 1.9) 0.2s;
+    box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+}
