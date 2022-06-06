@@ -34,9 +34,17 @@ class Servers extends connection {
     ): Promise<void> {
         let query: string;
 
-        if (typeof Colunm[1] === "number")
-            query = `${Colunm[0]} = ${Colunm[1]}`;
-        else query = `${Colunm[0]} = "${Colunm[1]}"`;
+
+        switch(typeof Colunm[1]) {
+            case "number":
+                query = `${Colunm[0]} = ${Colunm[1]}`;
+                break;
+            case "string":
+                query = `${Colunm[0]} = "${Colunm[1]}"`;
+                break;
+            case "boolean":
+                query = `${Colunm[0]} = ${Colunm[1] ? "TRUE" : "FALSE"}`;
+        }
 
         await this.cnt.query(
             `Update servers SET ${query} WHERE sv_id = "${ServerID}"`
@@ -62,7 +70,8 @@ type colunm =
     | ["log_channel", number]
     | ["welcome_msg", 1 | 0]
     | ["wlecome_channel", number]
-	| ["customizer_channel", number];
+	| ["customizer_channel", number]
+    | ["public_leader", boolean];
 
 interface ServerResponse extends RowDataPacket, Server {}
 

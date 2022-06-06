@@ -51,6 +51,7 @@ describe("servers", async () => {
 
         expect(server.prefix).toBe("waifu");
         expect(server.sv_id).toBe("1");
+        expect(server.public_leader).toBeFalsy();
     });
 
     it(`Should change server props.
@@ -63,11 +64,13 @@ describe("servers", async () => {
         await db.setColunm(["log_channel", 57294381], "1");
         await db.setColunm(["welcome_msg", 1], "1");
         await db.setColunm(["wlecome_channel", 213123], "1");
+        await db.setColunm(["public_leader", true], "1");
 
         const change = await db.getServer("1");
         db.close();
 
         expect(change.prefix).toBe("test");
+        expect(change.public_leader).toBeTruthy();
         expect(change.notify_warn).toBe(30);
         expect(change.muted_rol).toBe(1000);
         expect(change.log_channel).toBe(57294381);

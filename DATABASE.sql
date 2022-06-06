@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS servers(
     customizer_channel BIGINT(18) NOT NULL DEFAULT 0,    
     welcome_msg BOOLEAN NOT NULL DEFAULT 0,
     wlecome_channel BIGINT(18) NOT NULL DEFAULT 0,
-    welcome_msg_config JSON DEFAULT NULL
+    welcome_msg_config JSON DEFAULT NULL,
+    public_leader BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Users List
