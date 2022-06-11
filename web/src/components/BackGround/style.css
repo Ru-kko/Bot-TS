@@ -11,6 +11,7 @@
     display: flex;
     transform-origin: 0 0;
     flex-direction: column;
+    transition: transform .3s linear;
 }
 
 .backImg path {

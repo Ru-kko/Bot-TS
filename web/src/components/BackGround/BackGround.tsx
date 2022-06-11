@@ -11,7 +11,7 @@ export function Background(props: PropsWithChildren<{}>) {
     const location = useLocation();
     const loading = useSelector((state:RootState) => state.loading)
     const [height, setHeight] = useState<CSSProperties>({
-        transform: `scaleY(0)`,
+        transform: `scaleY(0)`
     });
 
     useEffect(() => {
@@ -20,10 +20,7 @@ export function Background(props: PropsWithChildren<{}>) {
                 transform: `scaleY(0)`,
             });
             setTimeout(() => {
-                setHeight({
-                    transform: `scaleY(1)`,
-                    transition: "transform .3s linear",
-                });
+                setHeight({});
             }, 100);
         }
     }, [location, loading]);
