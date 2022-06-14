@@ -1,22 +1,16 @@
-import discordjs, { Guild } from "discord.js";
+import discordjs, { PresenceStatusData } from "discord.js";
 import Members from "../crud/tables/membres";
 import { Servers } from "../crud/tables/servers";
 import cmd from "./commands";
 import channelDelete from "./events/channelDelete";
 
 const client = new discordjs.Client({
-    intents: [
-        "GUILDS",
-        "GUILD_MESSAGES",
-        "GUILD_MEMBERS",
-        "GUILD_BANS",
-        "DIRECT_MESSAGES",
-    ],
+    intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_BANS", "DIRECT_MESSAGES"],
 });
 
 export default () => {
     client.on("ready", () => {
-        client.user?.setStatus("invisible");
+        client.user?.setStatus(<PresenceStatusData>process.env.discord_status || "invisible");
         console.log(`Bot ready`);
     });
     client.on("guildCreate", async (guild) => {
@@ -52,13 +46,9 @@ export default () => {
         const content = message.content.split(" ");
 
         if (message.guild) {
-            await memberManager.addXP(
-                message.author.id,
-                message.guild.id,
-                Math.round(Math.random() * (10 - 5)) + 5
-            );
+            await memberManager.addXP(message.author.id, message.guild.id, Math.round(Math.random() * (10 - 5)) + 5);
         }
-        if (content[0] === server.prefix) {
+        if (content[0] === server.prefix || content[0] === `<@${client.application?.id}>`) {
             const func = cmd.get(content[1]);
             if (func) func.method(message);
         }
