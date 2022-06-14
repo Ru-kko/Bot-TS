@@ -6,6 +6,7 @@ export const store = configureStore(
         reducer: reducers,
         preloadedState: {
             session: false
-        }
+        },
+        devTools: true
     }
 );
