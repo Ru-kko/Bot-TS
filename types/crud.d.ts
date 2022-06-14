@@ -17,6 +17,7 @@ export interface Server {
 	wlecome_channel: number;
 	welcome_msg_config: object;
 	customizer_channel: number;
+	public_leader: 1 | 0;
 }
 
 export interface Member {

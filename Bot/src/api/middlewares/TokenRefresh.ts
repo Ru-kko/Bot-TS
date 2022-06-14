@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import type { NextFunction, Request, Response } from "express";
 import type { tokenData } from "../../../../types/DiscordAuth";
 import { refreshToken } from "../services/DiscordOauth";
+import { requestError } from "../services/Errors";
 
 export default async function tokenRefresh(
     req: Request,
@@ -9,12 +10,7 @@ export default async function tokenRefresh(
     next: NextFunction
 ) {
     if (!req.session.token) {
-        res.status(403);
-        return res.send({
-            error: "Fornidden",
-            status: 403,
-            message: "You are not logged in",
-        });
+        return res.status(401).send(requestError({status: 401}));
     }
     if (
         new Date(req.session.token.create).getTime() +

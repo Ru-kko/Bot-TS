@@ -5,6 +5,32 @@ export interface userBase {
     discriminator: string;
     public_flags: string;
 }
+export interface role {
+    id: string;
+    name: string;
+    permissions: number;
+    position: 0;
+}
+export interface emoji {
+    name: string;
+    id: string;
+    animeted: false;
+}
+export interface member {
+    roles: string[];
+    user: userBase
+}
+export interface guildBase {
+    id: string;
+    name: string;
+    icon?: string;
+    features: string[];
+}
+export interface fullGuild extends guildBase{
+    owner_id: string;
+    description?: string;
+    roles: role[];
+}
 
 export interface user extends userBase {
     flags: number;
@@ -25,21 +51,18 @@ export interface identify_request {
         install_params: {
             scopes: string[];
             permissions: number;
-        }
-    }
+        };
+    };
     expires: string;
     user: userBase;
 }
 
-export interface guild {
-    id: string;
+export interface UserGuild extends guildBase {
     name: string;
-    icon?: string;
     owner: boolean;
     permissions: number;
     permissions_new: number;
-    features: string[];
-} 
+}
 
 export interface tokenData {
     access_token: string;
@@ -47,4 +70,10 @@ export interface tokenData {
     refresh_token: string;
     scope?: String;
     token_type: String;
+}
+
+export interface basicGuilResponse {
+    id: string;
+    publioc_leader: boolean;
+    prefix: string;
 }
