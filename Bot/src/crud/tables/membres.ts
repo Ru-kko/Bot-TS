@@ -37,7 +37,7 @@ class Members extends connection {
             await this.memberJoin(UserID, ServerID);
         }
         
-        const condition = `WHERE usr_id = ${UserID} AND sv_id = "${ServerID}"`;
+        const condition = `WHERE usr_id = "${UserID}" AND sv_id = "${ServerID}"`;
         const member = await this.cnt
             .query<memberResponse[]>(
                 `SELECT sv_t_xp, act_level FROM usrs_srvs ` + condition
