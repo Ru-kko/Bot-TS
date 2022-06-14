@@ -9,27 +9,28 @@ import "./style.css";
 
 export function Background(props: PropsWithChildren<{}>) {
     const location = useLocation();
-    const loading = useSelector((state:RootState) => state.loading)
+    const loading = useSelector((state: RootState) => state.loading);
     const [height, setHeight] = useState<CSSProperties>({
-        transform: `scaleY(0)`
+        transform: `scaleY(0)`,
     });
 
     useEffect(() => {
-        if(loading === loadingReducerActions.loaded) {
-            setHeight({
-                transform: `scaleY(0)`,
-            });
+        setHeight({
+            transform: `scaleY(0)`
+        });
+        if (loading === loadingReducerActions.loaded) {
             setTimeout(() => {
-                setHeight({});
+                setHeight({
+                    transform: `scaleY(1)`,
+                    transition: "transform .5s linear"
+                });
             }, 100);
         }
     }, [location, loading]);
     return (
         <>
             <div className="backGrund" style={height}>
-                <div className="content">
-                    {props.children}
-                </div>
+                <div className="content">{props.children}</div>
                 <Wave />
             </div>
         </>
