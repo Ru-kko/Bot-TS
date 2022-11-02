@@ -1,0 +1,85 @@
+.userm-container {
+    min-height: calc(90vh - 80px);
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(40vh, 1fr));
+    justify-content: space-around;
+    gap: 50px;
+    padding: 40px 70px;
+    justify-items: center;
+}
+
+.userm-avatar {
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    height: 40vh;
+    gap: 15px;
+}
+
+.userm-profile-image-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userm-profile-image-cont span {
+    color: #b9bbbe;
+}
+
+.userm-options-cont {
+    padding-right: 25px;
+    margin-bottom: 25px;
+    display: flex;
+    min-height: 10vh;
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
+.userm-options-cont * {
+    font-size: large;
+    padding: 5px 15px;
+    border-radius: 0.8vh;
+    color: #57f288;
+    text-align: center;
+    font-weight: 700;
+    min-width: 9em;
+    background-color: transparent;
+    border: 3px solid;
+}
+
+.userm-options-cont *:hover {
+    color: #a8ecbc;
+    transform: translateY(1px);
+}
+
+.servers-menu-title {
+    font-size: 3em;
+    overflow: visible;
+    height: min-content;
+    font-weight: bold;
+    padding: 0 .5em .5em 0;
+    margin: 25px 0 0 0;
+    background: linear-gradient(#23272A, #23272A) no-repeat;
+    background-position: .4em .7em;
+    background-size: 4.5em 1.5em;
+    background-clip: border-box;
+}
+
+.servers-menu-cont {
+    display: grid;
+    gap: 20px;
+    margin: 50px 0 50px 0;
+    max-width: 95%;
+    grid-template-columns: repeat(auto-fit, minmax(27em, 1fr));
+}
+
+.servers-menu {
+    gap: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

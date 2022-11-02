@@ -1,0 +1,78 @@
+.message-bar-container{
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    transition: height linear 1s;
+}
+.mesage-bar{
+    width: 97%;
+    background-color: #40444b;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 1.5vh;
+    align-items: center;
+}
+.messages-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.Message-bar-txt {
+    padding: 0;
+    margin: 0px 20px;
+    font-weight: 400;
+    font-size: small;
+    color: #62656B;
+}
+.message-channel{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    font-size: small;
+    color: #8e9297;
+    padding: 5px 10px;
+}
+.message-channel.selected{
+    background-color: #393C43;
+    border-radius: 1vh;
+    color: white;
+}
+.message-channel.selected path{
+    fill: white;
+}
+.group-channel > b{
+    width: 100%;
+}
+.channels{
+    width: 0;
+    height: 0;
+    overflow: clip;
+    background-color: #32353B;
+    margin-right: 20px;
+    padding: 0 10px 10vh;
+    transition: all linear 1s;
+}
+.mesagge-channel-svg-group > *{
+    margin: 0 5px;
+}
+.Message-bar-txt > * {
+    margin: 0;
+}
+.messages-container span {
+    background-color: #3C406F;
+    font-weight: 400;
+    padding: 2px 1px;
+    border-radius: 5px;
+}
+.message-bar-description {
+    margin-left: 5vh;
+    color: #8e9297;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@bot/db",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.build.json",
+    "build-w": "tsc -w -p ./tsconfig.build.json",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "mysql2": "^2.3.3-rc.0"
+  },
+  "devDependencies": {
+    "@bot/config": "1.0.0",
+    "@bot/types": "1.0.0",
+    "@types/express-session": "^1.17.5",
+    "express-session": "^1.17.3",
+    "vitest": "^0.24.3"
+  }
+}

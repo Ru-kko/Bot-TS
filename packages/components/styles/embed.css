@@ -1,0 +1,28 @@
+.embed{
+    background-color: #2F3136;
+    border-radius: 5px;
+    margin: 20px 5px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+.embed-content{
+    border-left: solid 4px;
+    display: flex;
+    flex-direction: column;
+    padding: 1vh 3vh 2vh;
+    width: 100%;
+}
+.embed-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: large;
+    margin-bottom: 2vh;
+}
+.embed img {
+    height: 2em;
+    width: 2em;
+    margin-right: 2vh;
+    border-radius: 50%;
+}

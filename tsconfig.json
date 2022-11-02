@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "composite": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "allowJs": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "exclude": ["**/dist", "**/build", "**/node_modules"],
+  "references": [
+    {
+      "path": ".\\packages\\config\\tsconfig.build.json"
+    },
+    {
+      "path": ".\\packages\\DataBase\\tsconfig.build.json"
+    },
+    {
+      "path": ".\\packages\\bot\\tsconfig.build.json"
+    },
+    {
+      "path": ".\\packages\\api\\tsconfig.build.json"
+    },
+    {
+      "path": ".\\packages\\discord_auth\\tsconfig.build.json"
+    }
+  ]
+}

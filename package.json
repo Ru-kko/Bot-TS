@@ -1,0 +1,32 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "This is a discord bot with a dashboard using stack \r - Express\r - Mysql\r - React\r - Nodejs",
+  "scripts": {
+    "build:lib": "pnpm run -parallel --filter \"./packages/**\" build",
+    "build:lib-w": "pnpm run -parallel --filter \"./packages/**\" build-w"
+  },
+  "workspaces": [
+    "Web",
+    "packages/*",
+    "apps/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ru-kko/Bot-TS.git"
+  },
+  "keywords": [],
+  "author": "Ru-kko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ru-kko/Bot-TS/issues"
+  },
+  "homepage": "https://github.com/Ru-kko/Bot-TS#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.8",
+    "vitest": "^0.24.4"
+  },
+  "dependencies": {
+  }
+}

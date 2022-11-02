@@ -1,0 +1,16 @@
+{
+  "name": "@bot/client-hooks",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build-w": "tsc -w",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24"
+  }
+}

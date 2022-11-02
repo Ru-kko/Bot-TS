@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+    "noEmit": false
+  },
+  "exclude": ["dist"],
+  "extends": "../../tsconfig.client.json"
+}

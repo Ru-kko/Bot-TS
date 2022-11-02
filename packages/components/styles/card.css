@@ -1,0 +1,72 @@
+.server-card-cont {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 1vh;
+    background-color: #23272a;
+    width: 27em;
+    height: 10em;
+}
+.server-card-cont img {
+    height: 10em;
+    aspect-ratio: 1/1;
+}
+.server-card-inf {
+    position: relative;
+    padding: 10px 15px;
+    width: 100%;
+    overflow: hidden;
+}
+.server-card-name {
+    font-size: 1.7em;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.server-card-inf > span {
+    font-size: 0.7em;
+    color: #b9bbbe;
+}
+
+.server-card-buttoms {
+    position: absolute;
+    width: calc(100% - 30px);
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+    display: flex;
+    flex: 1 1 0px;
+    bottom: 15px;
+}
+
+.server-card-buttoms > button , .server-card-buttoms > a{
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    text-align: center;
+    padding: 0 5px;
+    font-size: large;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    box-sizing: border-box;
+    background-color: #5865f2;
+    border: solid 3px #5865f2;
+}
+
+.server-card-buttoms > .transparent {
+    background-color: transparent;
+    color: #5865f2;
+}
+
+.server-card-buttoms > button:hover , .server-card-buttoms > a:hover {
+    transform: translateY(-2px);
+    background-color: #7983f5;
+    border-color: #7983f5;
+}
+
+.server-card-buttoms > .transparent:hover {
+    background-color: transparent;
+    color: #7983f5;
+}

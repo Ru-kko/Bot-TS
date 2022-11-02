@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "declarationDir": "./dist",
+    "forceConsistentCasingInFileNames": true
+  },
+  "extends": "../../tsconfig.json"
+}

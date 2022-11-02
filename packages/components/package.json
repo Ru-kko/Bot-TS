@@ -1,0 +1,23 @@
+{
+  "name": "@bot/client-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build-w": "tsc -w"
+  },
+  "dependencies": {
+    "@bot/client-context": "1.0.0",
+    "@bot/client-hooks": "1.0.0",
+    "@bot/client-public": "1.0.0",
+    "@bot/config": "1.0.0",
+    "@bot/types": "1.0.0",
+    "react-router-dom": "^6.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24",
+    "react": "^18.2.0"
+  }
+}

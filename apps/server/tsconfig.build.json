@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "noEmit": false
+  },
+  "exclude": ["node_modules", "**/test", "**/vitest.config.ts", "**/dist"],
+  "extends": "../../tsconfig.json"
+}
