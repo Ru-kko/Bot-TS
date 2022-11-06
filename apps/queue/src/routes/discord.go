@@ -6,11 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type header struct {
-	Access string `json:"access"`
-	Guild  string `json:"guildId"`
-}
-
 func DiscordRouter(router fiber.Router) {
 	tokenRoute := router.Group("/token")
 	tokenRoute.Post("/", getToken)
@@ -53,12 +48,9 @@ func updateToken(c *fiber.Ctx) error {
 }
 
 func getBassic(c *fiber.Ctx) error {
-	var header header
-	if err := c.ReqHeaderParser(header); err != nil {
-		return err
-	}
+	Access := c.Request().Header.Peek("access")
 
-	if len([]rune(header.Access)) <= 10 {
+	if len(Access) <= 10 {
 		c.Status(401)
 		return c.JSON(request.Error{
 			Message: "invalid credentials",
@@ -67,7 +59,7 @@ func getBassic(c *fiber.Ctx) error {
 		})
 	}
 
-	val, err := discord.Identify(header.Access)
+	val, err := discord.Identify(string(Access))
 
 	if err != nil && err.Status != 0 {
 		c.Status(err.Status)
@@ -78,12 +70,9 @@ func getBassic(c *fiber.Ctx) error {
 }
 
 func getUser(c *fiber.Ctx) error {
-	var header header
-	if err := c.ReqHeaderParser(header); err != nil {
-		return err
-	}
+	Access := c.Request().Header.Peek("access")
 
-	if len([]rune(header.Access)) <= 10 {
+	if len(Access) <= 10 {
 		c.Status(401)
 		return c.JSON(request.Error{
 			Message: "invalid credentials",
@@ -92,7 +81,7 @@ func getUser(c *fiber.Ctx) error {
 		})
 	}
 
-	val, err := discord.GetFullUser(header.Access)
+	val, err := discord.GetFullUser(string(Access))
 
 	if err != nil && err.Status != 0 {
 		c.Status(err.Status)
@@ -103,12 +92,9 @@ func getUser(c *fiber.Ctx) error {
 }
 
 func getGuildsFromUser(c *fiber.Ctx) error {
-	var header header
-	if err := c.ReqHeaderParser(header); err != nil {
-		return err
-	}
+	Access := c.Request().Header.Peek("access")
 
-	if len([]rune(header.Access)) <= 10 {
+	if len(Access) <= 10 {
 		c.Status(401)
 		return c.JSON(request.Error{
 			Message: "invalid credentials",
@@ -117,7 +103,7 @@ func getGuildsFromUser(c *fiber.Ctx) error {
 		})
 	}
 
-	val, err := discord.GetUserGuilds(header.Access)
+	val, err := discord.GetUserGuilds(string(Access))
 
 	if err != nil && err.Status != 0 {
 		c.Status(err.Status)
@@ -128,12 +114,9 @@ func getGuildsFromUser(c *fiber.Ctx) error {
 }
 
 func getMemeber(c *fiber.Ctx) error {
-	var header header
-	if err := c.ReqHeaderParser(header); err != nil {
-		return err
-	}
+	Access, Guild := c.Request().Header.Peek("access"), c.Request().Header.Peek("guildId")
 
-	if len([]rune(header.Access)) <= 10 || len([]rune(header.Access)) <= 10 {
+	if len(Access) <= 10 || len(Guild) <= 10 {
 		c.Status(401)
 		return c.JSON(request.Error{
 			Message: "invalid credentials",
@@ -142,7 +125,7 @@ func getMemeber(c *fiber.Ctx) error {
 		})
 	}
 
-	val, err := discord.GetMember(header.Access, header.Guild)
+	val, err := discord.GetMember(string(Access), string(Guild))
 
 	if err != nil && err.Status != 0 {
 		c.Status(err.Status)

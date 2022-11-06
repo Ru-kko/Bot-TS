@@ -81,8 +81,8 @@ func Identify(token string) (*request.User, *request.Error) {
 		return &result, &err
 	}
 
+	json.Unmarshal(body, &result)
 	defer response.Body.Close()
-
 	return &result, &err
 }
 
@@ -147,13 +147,14 @@ func GetFullUser(token string) (*request.FullUser, *request.Error) {
 		return &result, &err
 	}
 
+	json.Unmarshal(body, &result)
 	defer response.Body.Close()
 
 	return &result, &err
 }
 
-func GetUserGuilds(token string) (*request.UserGuilds, *request.Error) {
-	var result request.UserGuilds
+func GetUserGuilds(token string) (*[]request.UserGuilds, *request.Error) {
+	var result []request.UserGuilds
 	var err request.Error
 
 	req, _ := http.NewRequest(http.MethodGet, discord_api_url+"/users/@me/guilds", nil)
@@ -173,6 +174,7 @@ func GetUserGuilds(token string) (*request.UserGuilds, *request.Error) {
 		return &result, &err
 	}
 
+	json.Unmarshal(body, &result)
 	defer response.Body.Close()
 
 	return &result, &err
@@ -199,6 +201,7 @@ func GetFullGuild(guildID string) (*request.FullGuild, *request.Error) {
 		return &result, &err
 	}
 
+	json.Unmarshal(body, &result)
 	defer response.Body.Close()
 
 	return &result, &err
@@ -229,6 +232,7 @@ func GetMember(token string, guildId string) (*request.Member, *request.Error) {
 		return &result, &err
 	}
 
+	json.Unmarshal(body, &result)
 	defer response.Body.Close()
 
 	return &result, &err
