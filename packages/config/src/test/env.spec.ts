@@ -21,5 +21,6 @@ describe("confige package", () => {
     expect(process.env.DC_TOKEN).not.toBeUndefined();
     expect(process.env.DC_REDIRECT_ENDPOINT).not.toBeUndefined();
     expect(process.env.PORT).not.toBeUndefined();
+    expect(process.env.SERVICES_REQUESTS_URI).not.toBeUndefined();
   });
 });

@@ -17,7 +17,9 @@ declare global {
 
       COOKIE_PSW: string;
 
-      SERVICES_REQUESTS_URI: string
+      SERVICES_REQUESTS_URI: string;
+      DB_PORT: string;
+      DB_HOST: string;
     }
   }
 }
@@ -33,7 +35,9 @@ const baseOptios: NodeJS.ProcessEnv = {
   DB_USER: "mysql user",
   DB_PASSWORD: "mysql password",
   COOKIE_PSW: "conocies encript password",
-  SERVICES_REQUESTS_URI: "your microservice uri"
+  SERVICES_REQUESTS_URI: "your microservice uri",
+  DB_PORT: "3306", // database port
+  DB_HOST: "localhost"
 };
 const dir = path.resolve(__dirname, "../.env");
 
