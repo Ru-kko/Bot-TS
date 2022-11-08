@@ -24,9 +24,9 @@ type FullUser struct {
 
 type UserGuilds struct {
 	guildBase
-	Owner           bool `json:"owner"`
-	Permissions     int  `json:"permissions"`
-	Permissions_new int  `json:"permissions_new"`
+	Owner           bool   `json:"owner"`
+	Permissions     string `json:"permissions"`
+	Permissions_new int    `json:"permissions_new"`
 }
 
 type FullGuild struct {
@@ -47,7 +47,7 @@ type userBase struct {
 	Username      string `json:"username"`
 	Avatar        string `json:"avatar"`
 	Discriminator string `json:"discriminator"`
-	Pubic_flags   string `json:"public_flags"`
+	Pubic_flags   int    `json:"public_flags"`
 }
 
 type guildBase struct {
@@ -75,6 +75,6 @@ type Application struct {
 type role struct {
 	Id          string `json:"id"`
 	Name        string `json:"name"`
-	Permissions int    `json:"permissions"`
+	Permissions string `json:"permissions"`
 	Position    int    `json:"position"`
 }

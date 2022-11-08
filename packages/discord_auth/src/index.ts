@@ -61,11 +61,11 @@ export async function getAServer(serverid: string) {
 }
 
 export async function getGuildMember(token: string, guildId: string) {
-  const microservice = process.env.SERVICES_REQUESTS_URI + "/dc/";
+  const microservice = process.env.SERVICES_REQUESTS_URI + "/dc";
   return await axios.get<member>(microservice + "/user/member", {
     headers: {
-      acccss: token,
-      guild: guildId,
+      access: token,
+      guildId: guildId,
     },
   });
 }
