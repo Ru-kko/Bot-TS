@@ -7,7 +7,7 @@ export default (ctx: context, text: string, options: textBoxOptions) => {
   var size = options.textSize || 18;
 
   ctx.fillStyle = options.color || "#FFFFFF";
-  ctx.font = `${size}px "MPLUS"`;
+  ctx.font = `${size}px "Mplus 1p Blod"`;
 
   for (var i = 0; i < options.rows; i++) {
     var txt = words.slice();

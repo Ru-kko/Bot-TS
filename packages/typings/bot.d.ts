@@ -1,3 +1,5 @@
+
+
 export interface application_response {
   code?: String;
   error?: number | string;
@@ -6,9 +8,21 @@ export interface application_response {
 export interface animeInf {
   mal_id: number;
   url: string;
-  image_url: string;
-  title: string;
+  images: {
+    jpg: {
+      image_url: string;
+    }
+  };
+  title: string
+  titles: {
+    type: string
+    title: string
+  }[];
   airing: boolean;
+  aired: {
+    from: string;
+    to: string
+  };
   synopsis: string;
   type: "TV" | "OVA" | "Movie" | "Special" | "ONA" | "Music";
   episodes: number;

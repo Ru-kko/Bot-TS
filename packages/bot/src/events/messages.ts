@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { Members, Servers } from "@bot/db";
-import bot  from "../index";
+import bot from "../index";
 import cmd from "../commands";
 
 export async function onMessage(message: Message) {
@@ -16,7 +16,13 @@ export async function onMessage(message: Message) {
   }
   if (content[0] === server.prefix || content[0] === `<@${bot.client.application?.id}>`) {
     const func = cmd.get(content[1]);
-    if (func) func.method(message);
+    if (func) {
+      try {
+        func.method(message);
+      } catch {
+        message.reply("sorry i'm having issues try agai please")
+      }
+    }
   }
   memberManager.close();
 }

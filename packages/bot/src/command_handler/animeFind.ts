@@ -1,12 +1,14 @@
-import Canvas from "canvas";
+import Canvas, { registerFont } from "canvas";
 import Resizer from "./methods/textResizer";
 
 import { Message, MessageEmbed, MessageAttachment, ColorResolvable, BufferResolvable } from "discord.js";
 import axios from "axios";
 import { animeInf } from "@bot/types";
+import path from "node:path";
+import { writeFileSync } from "node:fs";
 
 interface queryResponse {
-  results: animeInf[];
+  data: animeInf[];
 }
 
 interface StatusColor {
@@ -23,14 +25,15 @@ colors.set("ONA", { color: "#FC00E9", text: "ONA" });
 colors.set("Music", { color: "#2E86C1", text: "MUSIC" });
 
 export default async (message: Message) => {
+  registerFont(path.join(__dirname, '../../public/MPLUS.ttf'),{family: 'Mplus 1p Blod Blod', weight: "700"})
   const text = message.content.split(" ");
 
-  var searchUrl = "https://api.jikan.moe/v3/search/anime?q=";
+  var searchUrl = "https://api.jikan.moe/v4/anime?q=";
   var animeName = text.splice(2, text.length).join(" ");
 
-  const res = await axios({ method: "GET", url: searchUrl + animeName }).then((res) => {
-    return (<queryResponse>res.data).results[0];
-  });
+  const res = await axios({ method: "GET", url: searchUrl + animeName }).then(
+    (res) => (<queryResponse>res.data).data[0]
+  );
 
   const image = async () => {
     const embed = new MessageEmbed();
@@ -39,12 +42,12 @@ export default async (message: Message) => {
 
     /*         Background            */
     ctx.beginPath();
-    const background = await Canvas.loadImage("./public/images/FondoAnime.jpg");
+    const background = await Canvas.loadImage(path.join(__dirname, "../../public/images/FondoAnime.jpg"));
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.closePath();
     /*            Status             */
     ctx.beginPath();
-    ctx.font = "15px MPLUS";
+    ctx.font = '15px "Mplus 1p Blod"';
     if (res.airing) {
       ctx.fillStyle = "#FCBF00";
       ctx.fillText("Airling", 210, 180);
@@ -61,7 +64,7 @@ export default async (message: Message) => {
     ctx.closePath();
     /*             Info              */
     ctx.beginPath();
-    ctx.font = "15px MPLUS";
+    ctx.font = '15px "Mplus 1p Blod"';
     ctx.fillStyle = "#FFFFFF";
 
     if (res.start_date) ctx.fillText(`Start: ${res.start_date.slice(0, 10)}`, 210, 200);
@@ -69,7 +72,7 @@ export default async (message: Message) => {
     ctx.closePath();
     /*            Episodes            */
     ctx.beginPath();
-    ctx.font = "15px MPLUS";
+    ctx.font = '15px "Mplus 1p Blod"';
     ctx.fillStyle = "#FFFFFF";
     if (res.episodes === 0) {
       ctx.fillText(`Episodes: Not yet`, 210, 240);
@@ -78,7 +81,7 @@ export default async (message: Message) => {
     }
     ctx.closePath();
     /*              Image             */
-    const img = await Canvas.loadImage(res.image_url);
+    const img = await Canvas.loadImage(res.images.jpg.image_url);
     ctx.drawImage(img, 15, 115, 185, 310);
     /*            Synopsis             */
     Resizer(ctx, res.synopsis, { x: 15, y: 440, width: 370, rows: 6, textSize: 16 });
@@ -89,8 +92,8 @@ export default async (message: Message) => {
     ctx.fillStyle = colors.get(res.type)?.color || "#FFFFFF";
     ctx.fillRect(0, 90, 400, 10);
 
-    ctx.font = "20px MPLUS";
-    ctx.fillText(colors.get(res.type)?.text || "TV", 20, 70);
+    ctx.font = '20px "Mplus 1p Blod"';
+    ctx.fillText(colors.get(res.type)?.text || "TV", 20, 100);
     ctx.closePath();
     /*             Author              */
     ctx.beginPath();
@@ -101,15 +104,19 @@ export default async (message: Message) => {
     ctx.closePath();
 
     /*               Send               */
+    const buff = canvas.toBuffer("image/png");
 
-    const attachment = new MessageAttachment(<BufferResolvable>canvas.toBuffer(), "Anime.jpg");
+    const attachment = new MessageAttachment(buff, "Anime.jpeg");
 
-    embed.setImage("attachment://Anime.jpg");
+    embed.setImage("attachment://Anime.jpeg");
     embed.setColor(colors.get(res.type)?.color || <ColorResolvable>"GREEN");
     return { embed: embed, attachment: attachment };
   };
 
-  const { embed, attachment } = await image();
-
-  message.channel.send({ embeds: [embed], files: [attachment] });
+  if (res) {
+    const { embed, attachment } = await image();
+    message.channel.send({ embeds: [embed], files: [attachment] });
+  } else {
+    message.reply("Opps i couldn't thin that anime, try with another name");
+  }
 };
