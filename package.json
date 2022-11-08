@@ -5,10 +5,11 @@
   "description": "This is a discord bot with a dashboard using stack \r - Express\r - Mysql\r - React\r - Nodejs",
   "scripts": {
     "build:lib": "pnpm run -parallel --filter \"./packages/**\" build",
-    "build:lib-w": "pnpm run -parallel --filter \"./packages/**\" build-w"
+    "build:lib-w": "pnpm run -parallel --filter \"./packages/**\" build-w",
+    "build:serv": "pnpm run --filter \"./apps/server\" build",
+    "build:client": "pnpm run --filter \"./apps/client\" build"
   },
   "workspaces": [
-    "Web",
     "packages/*",
     "apps/*"
   ],
@@ -24,9 +25,6 @@
   },
   "homepage": "https://github.com/Ru-kko/Bot-TS#readme",
   "devDependencies": {
-    "@types/node": "^18.11.8",
-    "vitest": "^0.24.4"
-  },
-  "dependencies": {
+    "@types/node": "^18.11.8"
   }
 }

@@ -13,5 +13,8 @@
     "@bot/config": "1.0.0",
     "@bot/types": "1.0.0",
     "axios": "^1.1.3"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
   }
 }

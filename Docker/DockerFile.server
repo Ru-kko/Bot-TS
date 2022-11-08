@@ -1,0 +1,42 @@
+FROM node:16-alpine
+
+
+ENV PORT=8080
+EXPOSE 8080
+
+WORKDIR /usr/src/app
+
+COPY package.json pnpm-lock.yaml ./
+COPY packages/config/package.json ./packages/config/
+COPY packages/api/package.json ./packages/api/
+COPY packages/bot/package.json ./packages/bot/
+COPY packages/DataBase/package.json ./packages/DataBase/
+COPY packages/discord_auth/package.json ./packages/discord_auth/
+COPY packages/typings/package.json ./packages/typings/
+COPY . .
+
+RUN apk add --no-cache \
+  build-base \
+  g++ \
+  cairo-dev \
+  jpeg-dev \
+  pango-dev \
+  bash \
+  imagemagick
+
+RUN npm i -g npm@latest; \
+  npm isntall -g pnpm \
+  pnpm setup; \
+  mkdir -p /usr/local/share/pnpm &&\
+  export PNPM_HOME="/usr/local/share/pnpm" &&\
+  export PATH="$PNPM_HOME:$PATH"; \
+  pnpm bin -g 
+
+RUN pnpm install -r
+
+
+RUN pnpm run build:lib
+RUN pnpm run build:serv
+
+
+CMD ["node", "apps/server/dist/index.js"]

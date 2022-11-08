@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "declarationDir": "./dist",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "vitest/globals"
+    ]
   },
   "extends": "../../tsconfig.json"
 }

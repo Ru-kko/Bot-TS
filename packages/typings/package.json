@@ -1,5 +1,8 @@
 {
   "name": "@bot/types",
   "version": "1.0.0",
-  "types": "./index.d.ts"
+  "types": "./index.d.ts",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
 }

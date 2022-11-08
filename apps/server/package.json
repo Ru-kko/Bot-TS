@@ -7,8 +7,11 @@
     "start": "node ./dist/index.js"
   },
   "dependencies": {
-    "@bot/bot": "1.0.0",
     "@bot/api": "1.0.0",
+    "@bot/bot": "1.0.0",
     "@bot/config": "1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
   }
 }

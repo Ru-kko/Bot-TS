@@ -1,0 +1,5 @@
+FROM mysql:8.0.31-debian
+
+ENV MYSQL_ROOT_PASSWORD=typepassword
+ADD DATABASE.sql /docker-entrypoint-initdb.d
+EXPOSE 3306
